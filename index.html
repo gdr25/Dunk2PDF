@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dunk2PDF - Turn Word Documents into PDFs by Dunking!</title>
+    <title>Dunk2PDF - Dunk Word Documents into PDFs!</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -35,7 +35,6 @@
             color: #F8FAFC;
         }
 
-        /* Canvas styling */
         #gameCanvas {
             touch-action: none;
             cursor: grab;
@@ -47,13 +46,8 @@
             cursor: grabbing;
         }
 
-        /* Text glow & subtle animations */
         .text-glow {
-            text-shadow: 0 0 12px rgba(249, 115, 22, 0.6);
-        }
-
-        .neon-glow {
-            box-shadow: 0 0 25px rgba(34, 197, 94, 0.4);
+            text-shadow: 0 0 14px rgba(249, 115, 22, 0.6);
         }
 
         ::-webkit-scrollbar {
@@ -78,7 +72,6 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-orange-500 selection:text-white">
 
-    <!-- Sticky Navigation -->
     <nav class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
@@ -90,7 +83,7 @@
                     <span class="text-xl font-extrabold tracking-tight text-white">Dunk<span class="text-orange-500">2PDF</span></span>
                 </div>
 
-                <!-- Nav Links -->
+                <!-- Links -->
                 <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
                     <a href="#game-section" class="hover:text-orange-400 transition-colors">Converter Court</a>
                     <a href="#how-it-works" class="hover:text-orange-400 transition-colors">How It Works</a>
@@ -98,7 +91,7 @@
                     <a href="#privacy" class="hover:text-orange-400 transition-colors">Privacy & Security</a>
                 </div>
 
-                <!-- CTA Button -->
+                <!-- CTA -->
                 <div>
                     <a href="#game-section" class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 rounded-lg shadow-md hover:shadow-orange-500/30 transition-all">
                         Convert Word File
@@ -108,10 +101,9 @@
         </div>
     </nav>
 
-    <!-- Toast Notification Container -->
+    <!-- Toast Container -->
     <div id="toastContainer" class="fixed top-20 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
-    <!-- Hero Header -->
     <header class="relative py-12 px-4 text-center max-w-4xl mx-auto">
         <span class="inline-flex items-center gap-2 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 rounded-full mb-4">
             <i class="fa-solid fa-bolt text-emerald-400"></i> Ultra-Realistic Hoop Mechanics & Net Swish
@@ -125,11 +117,10 @@
         </p>
     </header>
 
-    <!-- Main Converter Arena Card -->
     <section id="game-section" class="max-w-5xl mx-auto px-4 w-full mb-16">
         <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl">
             
-            <!-- Game Header Bar (Visible when file is loaded) -->
+            <!-- Game Header Bar -->
             <div id="gameHeaderBar" class="hidden p-4 sm:p-5 border-b border-slate-700/50 flex flex-wrap items-center justify-between gap-4 bg-slate-900/60">
                 <div class="flex items-center gap-6">
                     <div>
@@ -146,7 +137,6 @@
                     </div>
                 </div>
 
-                <!-- Controls -->
                 <div class="flex items-center gap-2 sm:gap-3">
                     <button id="autoDunkBtn" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-4 py-2 rounded-lg text-sm shadow-md transition-all flex items-center gap-2">
                         <span>Auto Dunk</span> 🏀
@@ -161,10 +151,9 @@
                 </div>
             </div>
 
-            <!-- Court Arena Container -->
+            <!-- Court Canvas Container -->
             <div class="relative w-full aspect-[16/9] min-h-[380px] max-h-[520px] bg-slate-950 overflow-hidden flex items-center justify-center">
                 
-                <!-- Game Canvas -->
                 <canvas id="gameCanvas" class="w-full h-full block"></canvas>
 
                 <!-- STATE 1: INITIAL UPLOAD DROPZONE OVERLAY -->
@@ -195,7 +184,6 @@
                         <h3 class="text-2xl font-black text-white mb-1">SWISH! PERFECT SHOT! 🏀</h3>
                         <p id="conversionStatusText" class="text-sm text-slate-300 mb-6 font-medium">Reading document structures...</p>
 
-                        <!-- Progress Bar -->
                         <div class="w-full bg-slate-800 rounded-full h-3.5 mb-2 overflow-hidden border border-slate-700">
                             <div id="conversionProgressBar" class="bg-gradient-to-r from-orange-500 via-amber-400 to-emerald-400 h-full w-0 transition-all duration-150"></div>
                         </div>
@@ -344,8 +332,7 @@
         const convertAnotherBtn = document.getElementById('convertAnotherBtn');
         const downloadFileDetails = document.getElementById('downloadFileDetails');
 
-        // Application State Machine:
-        // 'IDLE_NO_FILE' -> 'READY_TO_SHOOT' -> 'DRAGGING' -> 'IN_FLIGHT' -> 'SWISH_NET' -> 'CONVERTING' -> 'COMPLETED'
+        // State Machine
         let appState = 'IDLE_NO_FILE';
 
         let score = 0;
@@ -354,11 +341,11 @@
         let uploadedFileSizeStr = "";
         let uploadedFileExt = "";
 
-        // Dimensions
+        // Canvas size
         let width = 800;
         let height = 450;
 
-        // Ball / Document Projectile Parameters
+        // Ball / Document Parameters
         const ball = {
             x: 140,
             y: 300,
@@ -377,15 +364,14 @@
 
         // Basketball Hoop Parameters
         const hoop = {
-            x: 660,
-            y: 170,
-            rimRadius: 42,
-            rimWidth: 80,
-            backboardWidth: 14,
-            backboardHeight: 120,
-            netLength: 85,
-            netBulge: 0,          // Dynamic bulge magnitude
-            swishProgress: 0      // Progress along net slide
+            x: 640,
+            y: 165,
+            rimRadius: 46,
+            backboardWidth: 16,
+            backboardHeight: 130,
+            netLength: 95,
+            netBulge: 0,
+            swishProgress: 0
         };
 
         // Physics Constants
@@ -427,9 +413,7 @@
                 gain.connect(audioCtx.destination);
 
                 noise.start();
-            } catch (err) {
-                // Silent fallback
-            }
+            } catch (err) {}
         }
 
         function showToast(message, type = 'error') {
@@ -470,7 +454,7 @@
 
             const name = file.name;
             const ext = name.split('.').pop().toLowerCase();
-            const maxBytes = 25 * 1024 * 1024; // 25MB
+            const maxBytes = 25 * 1024 * 1024; // 25MB limit
 
             if (ext !== 'doc' && ext !== 'docx') {
                 showToast('Invalid format! Please upload a .DOC or .DOCX file.', 'error');
@@ -532,7 +516,7 @@
             if (appState !== 'IDLE_NO_FILE') appState = 'READY_TO_SHOOT';
         }
 
-        // File Drag & Drop Events
+        // Dropzone listeners
         dropTarget.addEventListener('click', () => mainFileInput.click());
         mainFileInput.addEventListener('change', (e) => validateAndProcessFile(e.target.files[0]));
         changeFileInput.addEventListener('change', (e) => validateAndProcessFile(e.target.files[0]));
@@ -577,7 +561,7 @@
                 ball.y = ball.initialY;
             }
 
-            hoop.x = width - Math.max(100, width * 0.18);
+            hoop.x = width - Math.max(120, width * 0.22);
             hoop.y = height * 0.36;
         }
 
@@ -622,9 +606,9 @@
             let rawVx = (ball.initialX - ball.x) * DRAG_SENSITIVITY;
             let rawVy = (ball.initialY - ball.y) * DRAG_SENSITIVITY;
 
-            // FORGIVING AUTO-AIM ASSIST:
+            // FORGIVING AUTO-AIM ASSIST
             if (rawVx > 1.8 && rawVy < 0) {
-                const targetX = hoop.x - hoop.rimRadius * 0.25;
+                const targetX = hoop.x - hoop.rimRadius * 0.5;
                 const targetY = hoop.y - 30;
                 
                 const dxHoop = targetX - ball.initialX;
@@ -632,7 +616,7 @@
                 const steps = dxHoop / Math.max(0.1, rawVx);
                 const idealVy = (dyHoop - 0.5 * GRAVITY * steps * steps) / steps;
 
-                const assistFactor = 0.65;
+                const assistFactor = 0.68;
                 ball.computedVx = rawVx;
                 ball.computedVy = rawVy * (1 - assistFactor) + idealVy * assistFactor;
             } else {
@@ -666,17 +650,16 @@
         canvas.addEventListener('touchmove', handlePointerMove, { passive: true });
         window.addEventListener('touchend', handlePointerUp);
 
-        // Auto Dunk Trigger
         autoDunkBtn.addEventListener('click', () => {
             if (appState !== 'READY_TO_SHOOT') return;
             appState = 'IN_FLIGHT';
             ball.x = ball.initialX;
             ball.y = ball.initialY;
 
-            const targetX = hoop.x - hoop.rimRadius * 0.2;
+            const targetX = hoop.x - hoop.rimRadius * 0.5;
             const targetY = hoop.y - 35;
             
-            ball.vx = 12;
+            ball.vx = 11.5;
             const dxHoop = targetX - ball.initialX;
             const steps = dxHoop / ball.vx;
             ball.vy = ((targetY - ball.initialY) - 0.5 * GRAVITY * steps * steps) / steps;
@@ -701,66 +684,76 @@
             ctx.lineTo(width, floorY);
             ctx.stroke();
 
-            // Glass Backboard (Clear Glass Style with dark/white borders)
-            const bbX = hoop.x + hoop.rimRadius - 2;
+            // Heavy Steel Support Pole
+            const bbX = hoop.x + hoop.rimRadius + 8;
             const bbY = hoop.y - hoop.backboardHeight / 2;
+
+            ctx.fillStyle = '#1E293B';
+            ctx.fillRect(bbX + hoop.backboardWidth + 4, hoop.y - 10, 28, height - hoop.y + 10);
             
-            // Glass fill
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+            // Angled Bracket Mounts
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(bbX + hoop.backboardWidth, hoop.y - 45);
+            ctx.lineTo(bbX + hoop.backboardWidth + 24, hoop.y - 10);
+            ctx.moveTo(bbX + hoop.backboardWidth, hoop.y + 45);
+            ctx.lineTo(bbX + hoop.backboardWidth + 24, hoop.y - 10);
+            ctx.stroke();
+
+            // Glass Backboard
+            ctx.fillStyle = 'rgba(248, 250, 252, 0.15)';
             ctx.fillRect(bbX, bbY, hoop.backboardWidth, hoop.backboardHeight);
             
-            // Outer Border
+            // Outer White Border
             ctx.strokeStyle = '#FFFFFF';
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 4;
             ctx.strokeRect(bbX, bbY, hoop.backboardWidth, hoop.backboardHeight);
 
-            // Inner Shooting Square
-            const sqW = 8;
-            const sqH = 45;
-            ctx.strokeStyle = '#0284C7'; // Blue box outline
-            ctx.lineWidth = 2.5;
-            ctx.strokeRect(bbX, hoop.y - sqH / 2, sqW, sqH);
+            // Inner Orange Targeting Square Outline
+            const sqH = 48;
+            ctx.strokeStyle = '#F97316';
+            ctx.lineWidth = 3.5;
+            ctx.strokeRect(bbX + 1, hoop.y - sqH / 2, 8, sqH);
 
-            // Support Pole
-            ctx.fillStyle = '#334155';
-            ctx.fillRect(bbX + hoop.backboardWidth, hoop.y, 22, height - hoop.y - 40);
-
-            // DRAW WOVEN DIAMOND NET MESH (BEFORE FRONT RIM OVERLAY)
+            // DRAW WOVEN DIAMOND NET MESH
             drawWovenNetMesh();
 
-            // Sharp Basketball Orange Solid Rim with Net Hooks
+            // Solid Metal Orange Rim & Net Hooks Overlay
             drawRimAndHooks();
         }
 
-        // REALISTIC WOVEN DIAMOND NET MESH SVG-STYLE CANVAS DRAWING
         function drawWovenNetMesh() {
             ctx.save();
             
-            const topW = hoop.rimRadius * 2;
-            const botW = hoop.rimRadius * 1.1;
+            const rimLeftX = hoop.x - hoop.rimRadius;
+            const rimRightX = hoop.x + hoop.rimRadius;
+            const startY = hoop.y + 4;
             const netH = hoop.netLength;
-            const startX = hoop.x - hoop.rimRadius;
-            const startY = hoop.y + 3;
 
-            const bulge = hoop.netBulge; // Reactive bulge expansion factor
-            
+            const bulge = hoop.netBulge;
+
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
             ctx.lineWidth = 2.2;
             ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
             ctx.shadowBlur = 4;
 
-            const rows = 7;
-            const cols = 10;
+            const rows = 8;
+            const cols = 12;
 
-            // Generate Diamond Grid Nodes
+            // Generate Mesh Grid Nodes with Dynamic Bulge Wave
             const nodes = [];
             for (let r = 0; r <= rows; r++) {
                 nodes[r] = [];
                 const t = r / rows;
-                // Width tapers down, but swells outward if bulging
-                const currentWidth = (topW * (1 - t) + botW * t) + Math.sin(t * Math.PI) * bulge * 28;
-                const currentX = hoop.x - currentWidth / 2;
-                const currentY = startY + t * netH;
+
+                // Natural tapered width from rim down to bottom opening
+                const baseWidth = (hoop.rimRadius * 2) * (1 - t * 0.45);
+                const currentWidth = baseWidth + Math.sin(t * Math.PI) * bulge * 32;
+                
+                const centerX = hoop.x + Math.sin(t * Math.PI) * (bulge * 8);
+                const currentX = centerX - currentWidth / 2;
+                const currentY = startY + t * netH + Math.sin(t * Math.PI) * (bulge * 12);
 
                 for (let c = 0; c <= cols; c++) {
                     const colRatio = c / cols;
@@ -771,28 +764,28 @@
                 }
             }
 
-            // Draw Cross-Hatched Woven Diamond Strands
+            // Draw Cross-Hatched Interlocking Diamond Strands
             ctx.beginPath();
-            // Left-to-Right Diagonals
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {
+                    // Left-to-Right Diagonals
                     ctx.moveTo(nodes[r][c].x, nodes[r][c].y);
                     ctx.lineTo(nodes[r + 1][c + 1].x, nodes[r + 1][c + 1].y);
                 }
             }
-            // Right-to-Left Diagonals
             for (let r = 0; r < rows; r++) {
                 for (let c = 1; c <= cols; c++) {
+                    // Right-to-Left Diagonals
                     ctx.moveTo(nodes[r][c].x, nodes[r][c].y);
                     ctx.lineTo(nodes[r + 1][c - 1].x, nodes[r + 1][c - 1].y);
                 }
             }
             ctx.stroke();
 
-            // Bottom Ring Opening Loop
+            // Reinforced Bottom Loop Ring
             ctx.beginPath();
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.lineWidth = 2.8;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.lineWidth = 3;
             for (let c = 0; c <= cols; c++) {
                 if (c === 0) ctx.moveTo(nodes[rows][c].x, nodes[rows][c].y);
                 else ctx.lineTo(nodes[rows][c].x, nodes[rows][c].y);
@@ -802,7 +795,6 @@
             ctx.restore();
         }
 
-        // Sharp Orange Rim & Realistic Net Loop Mounts
         function drawRimAndHooks() {
             ctx.save();
 
@@ -810,28 +802,32 @@
             const ry = hoop.y;
             const rad = hoop.rimRadius;
 
-            // Rim Depth Shadow Lip
+            // Rim Rear Bracket Connection
+            ctx.fillStyle = '#EA580C';
+            ctx.fillRect(rx + rad - 4, ry - 6, 16, 12);
+
+            // Elliptical Rim Shadow Lip
             ctx.fillStyle = '#C2410C';
             ctx.beginPath();
-            ctx.ellipse(rx - rad/2, ry + 3, rad, rad * 0.22, 0, 0, Math.PI * 2);
+            ctx.ellipse(rx, ry + 3, rad, rad * 0.22, 0, 0, Math.PI * 2);
             ctx.fill();
 
-            // Solid Vibrant Orange Rim Ring
+            // Solid Metal Orange Rim Ring
             ctx.strokeStyle = '#F97316';
             ctx.lineWidth = 7;
             ctx.beginPath();
-            ctx.ellipse(rx - rad/2, ry, rad, rad * 0.22, 0, 0, Math.PI * 2);
+            ctx.ellipse(rx, ry, rad, rad * 0.22, 0, 0, Math.PI * 2);
             ctx.stroke();
 
-            // Front Net Connection Loop Hooks
+            // Wire Net Loops
             ctx.fillStyle = '#FFFFFF';
-            const hooks = 8;
+            const hooks = 10;
             for (let i = 0; i <= hooks; i++) {
                 const angle = Math.PI * (i / hooks);
-                const hx = rx - rad/2 + Math.cos(angle) * rad;
+                const hx = rx + Math.cos(angle) * rad;
                 const hy = ry + Math.sin(angle) * (rad * 0.22);
                 ctx.beginPath();
-                ctx.arc(hx, hy + 2, 2, 0, Math.PI * 2);
+                ctx.arc(hx, hy + 2, 2.2, 0, Math.PI * 2);
                 ctx.fill();
             }
 
@@ -845,7 +841,7 @@
             let currVx = vx;
             let currVy = vy;
 
-            for (let i = 0; i < 45; i++) {
+            for (let i = 0; i < 48; i++) {
                 points.push({ x: currX, y: currY });
                 currX += currVx;
                 currY += currVy;
@@ -867,10 +863,10 @@
 
             ctx.save();
             ctx.strokeStyle = '#22C55E';
-            ctx.lineWidth = 4;
-            ctx.setLineDash([6, 6]);
+            ctx.lineWidth = 4.5;
+            ctx.setLineDash([7, 7]);
             ctx.shadowColor = '#22C55E';
-            ctx.shadowBlur = 12;
+            ctx.shadowBlur = 14;
 
             ctx.beginPath();
             ctx.moveTo(points[0].x, points[0].y);
@@ -879,12 +875,11 @@
             }
             ctx.stroke();
 
-            // Target Ring
             const lastPt = points[points.length - 1];
             ctx.setLineDash([]);
-            ctx.fillStyle = 'rgba(34, 197, 94, 0.35)';
+            ctx.fillStyle = 'rgba(34, 197, 94, 0.4)';
             ctx.beginPath();
-            ctx.arc(lastPt.x, lastPt.y, 10, 0, Math.PI * 2);
+            ctx.arc(lastPt.x, lastPt.y, 11, 0, Math.PI * 2);
             ctx.fill();
 
             ctx.restore();
@@ -901,34 +896,33 @@
             const w = 58;
             const h = 72;
 
-            // Folded Document Card
             ctx.fillStyle = '#FFFFFF';
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
-            ctx.shadowBlur = 12;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+            ctx.shadowBlur = 14;
 
             ctx.beginPath();
             ctx.roundRect(-w/2, -h/2, w, h, 6);
             ctx.fill();
 
-            // Top Header Ribbon
+            // Ribbon
             ctx.fillStyle = '#2563EB';
             ctx.beginPath();
             ctx.roundRect(-w/2, -h/2, w, 16, [6, 6, 0, 0]);
             ctx.fill();
 
-            // Format Badge Text
+            // Extension badge
             ctx.fillStyle = '#FFFFFF';
             ctx.font = 'bold 9px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.fillText(uploadedFileExt || 'DOCX', 0, -h/2 + 11);
 
-            // Document Content Lines
+            // Document mock text lines
             ctx.fillStyle = '#CBD5E1';
             ctx.fillRect(-w/2 + 8, -h/2 + 24, w - 16, 3);
             ctx.fillRect(-w/2 + 8, -h/2 + 31, w - 20, 3);
             ctx.fillRect(-w/2 + 8, -h/2 + 38, w - 16, 3);
 
-            // File Size Badge
+            // Size Tag
             ctx.fillStyle = '#F8FAFC';
             ctx.strokeStyle = '#E2E8F0';
             ctx.lineWidth = 1;
@@ -941,7 +935,7 @@
             ctx.font = '700 8px Inter, sans-serif';
             ctx.fillText(uploadedFileSizeStr || '1.2 MB', 0, h/2 - 10);
 
-            // Basketball Seam Arc
+            // Basketball Seams Overlay
             ctx.strokeStyle = 'rgba(249, 115, 22, 0.35)';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -961,8 +955,7 @@
                     vy: (Math.random() - 0.5) * 8 - 2,
                     color: Math.random() > 0.5 ? '#22C55E' : '#F97316',
                     size: Math.random() * 5 + 3,
-                    alpha: 1,
-                    life: 1
+                    alpha: 1
                 });
             }
         }
@@ -994,7 +987,6 @@
             score += 100;
             scoreDisplay.textContent = score;
 
-            // Show Conversion Overlay
             conversionOverlay.classList.remove('opacity-0', 'pointer-events-none');
             convertingState.classList.remove('hidden');
             downloadState.classList.add('hidden');
@@ -1085,66 +1077,56 @@ startxref
         function gameLoop() {
             ctx.clearRect(0, 0, width, height);
 
-            // Draw Static Elements
+            // Draw Court Base
             drawCourt();
 
-            // Physics Update for In-Flight Shot
+            // Flight collision & trajectory calculation
             if (appState === 'IN_FLIGHT') {
                 ball.x += ball.vx;
                 ball.y += ball.vy;
                 ball.vy += GRAVITY;
                 ball.rotation += ball.vRot;
 
-                // Check Swish Entry at Rim
-                const targetX = hoop.x - hoop.rimRadius * 0.25;
+                const targetX = hoop.x;
                 const targetY = hoop.y;
 
                 const distToRim = Math.hypot(ball.x - targetX, ball.y - targetY);
 
-                if (distToRim < 30 && ball.vy > 0) {
-                    // SWISH TRIGGER!
+                if (distToRim < 38 && ball.vy > 0) {
+                    // SWISH TRIGGER
                     appState = 'SWISH_NET';
-                    spawnSwishParticles(hoop.x - hoop.rimRadius * 0.25, hoop.y);
+                    spawnSwishParticles(hoop.x, hoop.y);
                 } else if (ball.y > height + 50 || ball.x > width + 50) {
-                    // Missed shot reset
                     showToast('Missed shot! Pull back and try again.', 'error');
                     resetBallPosition();
                 }
             }
 
-            // Real-time Net Bulge & Slide Down Animation
+            // Swish animation: slide down center & bulge net outward
             if (appState === 'SWISH_NET') {
-                hoop.swishProgress += 0.06;
-                hoop.netBulge = Math.sin(hoop.swishProgress * Math.PI); // Smooth outward swell
+                hoop.swishProgress += 0.055;
+                hoop.netBulge = Math.sin(hoop.swishProgress * Math.PI);
 
-                // Slide document straight DOWN through net center
-                ball.x = hoop.x - hoop.rimRadius * 0.25;
+                // Align straight down through rim center
+                ball.x = hoop.x;
                 ball.y = hoop.y + hoop.swishProgress * hoop.netLength;
-                ball.rotation *= 0.8; // Align straight
+                ball.rotation *= 0.8;
 
                 if (hoop.swishProgress >= 1.0) {
-                    // Complete exit from net bottom
                     ball.opacity = 0;
                     triggerConversionSequence();
                 }
             } else {
-                // Return net to rest position
                 hoop.netBulge *= 0.9;
             }
 
-            // Draw Trajectory Guidance
             drawTrajectoryArc();
-
-            // Draw Document Card
             drawBall();
-
-            // Draw Particles
             updateAndDrawParticles();
 
             requestAnimationFrame(gameLoop);
         }
 
-        // Initialize Canvas & Start
         window.onload = function() {
             resizeCanvas();
             gameLoop();
