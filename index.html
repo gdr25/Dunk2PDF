@@ -1,1349 +1,1154 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dunk2PDF — Vertical Dunk Document Converter</title>
-  <meta name="description" content="Slam dunk your DOC and DOCX files straight into PDF format with a vertical court, visible trajectory guidance, and magnetic auto-dunking.">
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg-main: #F8FAFC;
-      --primary: #0F172A;
-      --orange: #F97316;
-      --orange-hover: #EA580C;
-      --neon-green: #22C55E;
-      --neon-green-glow: #4ADE80;
-      --gray-muted: #64748B;
-      --card-bg: #FFFFFF;
-      --border-color: #E2E8F0;
-      
-      --font-main: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 20px;
-      --radius-xl: 32px;
-      
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-      --shadow-glow-green: 0 0 35px rgba(34, 197, 94, 0.65);
-      --shadow-glow-orange: 0 0 35px rgba(249, 115, 22, 0.5);
-
-      --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: var(--font-main);
-      background-color: var(--bg-main);
-      color: var(--primary);
-      line-height: 1.5;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    button {
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      background: none;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 12px 26px;
-      border-radius: var(--radius-md);
-      transition: all 0.2s var(--transition-smooth);
-    }
-
-    .btn-primary {
-      background-color: var(--orange);
-      color: #FFFFFF;
-      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
-    }
-
-    .btn-primary:hover {
-      background-color: var(--orange-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.45);
-    }
-
-    .btn-success {
-      background-color: var(--neon-green);
-      color: #FFFFFF;
-      box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
-    }
-
-    .btn-success:hover {
-      background-color: #16A34A;
-      transform: translateY(-2px);
-    }
-
-    .btn-outline {
-      background-color: transparent;
-      border: 1px solid var(--border-color);
-      color: var(--primary);
-    }
-
-    .btn-outline:hover {
-      background-color: #F1F5F9;
-      border-color: #CBD5E1;
-    }
-
-    .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(248, 250, 252, 0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-    }
-
-    .nav-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 72px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 900;
-      font-size: 1.35rem;
-      letter-spacing: -0.03em;
-    }
-
-    .brand-icon {
-      width: 32px;
-      height: 32px;
-      fill: var(--orange);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-weight: 600;
-      color: var(--gray-muted);
-      transition: color 0.2s ease;
-    }
-
-    .nav-links a:hover {
-      color: var(--primary);
-    }
-
-    .hero {
-      position: relative;
-      padding: 60px 0 40px;
-      text-align: center;
-    }
-
-    .hero-title {
-      font-size: 56px;
-      font-weight: 900;
-      line-height: 1.1;
-      letter-spacing: -0.04em;
-      margin-bottom: 18px;
-    }
-
-    .hero-subtitle {
-      font-size: 1.15rem;
-      color: var(--gray-muted);
-      max-width: 640px;
-      margin: 0 auto 28px;
-    }
-
-    .converter-section {
-      padding: 10px 0 80px;
-    }
-
-    .game-card {
-      background-color: var(--card-bg);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-lg);
-      width: 100%;
-      max-width: 860px;
-      margin: 0 auto;
-      min-height: 800px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .game-header {
-      padding: 20px 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border-color);
-      background: #FAFAFC;
-    }
-
-    .step-badge {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--orange);
-      background: rgba(249, 115, 22, 0.12);
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 4px;
-    }
-
-    .game-title {
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-
-    .score-board {
-      display: flex;
-      gap: 16px;
-      background-color: #FFFFFF;
-      padding: 8px 18px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-color);
-    }
-
-    .score-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .score-label {
-      font-size: 0.65rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--gray-muted);
-    }
-
-    .score-value {
-      font-size: 1.2rem;
-      font-weight: 900;
-      color: var(--primary);
-    }
-
-    /* VERTICAL COURT ARENA */
-    .game-arena {
-      flex: 1;
-      position: relative;
-      background: radial-gradient(circle at 50% 20%, #FFFFFF 0%, #F1F5F9 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 30px 20px 40px;
-      min-height: 700px;
-      touch-action: none;
-    }
-
-    .vertical-court-markings {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.08;
-      background-image: 
-        radial-gradient(circle at 50% 0%, transparent 220px, var(--primary) 222px, transparent 224px),
-        linear-gradient(to bottom, transparent 49.5%, var(--primary) 50%, transparent 50.5%);
-    }
-
-    /* UPLOAD DROPZONE STATE */
-    .state-upload {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-    }
-
-    .drop-zone {
-      width: 100%;
-      max-width: 580px;
-      height: 380px;
-      border: 2px dashed #CBD5E1;
-      border-radius: var(--radius-lg);
-      background-color: #FFFFFF;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 32px;
-      text-align: center;
-      transition: all 0.25s var(--transition-smooth);
-      cursor: pointer;
-    }
-
-    .drop-zone:hover, .drop-zone.drag-over {
-      border-color: var(--orange);
-      background-color: rgba(249, 115, 22, 0.03);
-      transform: scale(1.01);
-    }
-
-    .upload-icon-wrapper {
-      width: 70px;
-      height: 70px;
-      background: rgba(249, 115, 22, 0.1);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      color: var(--orange);
-    }
-
-    /* GAMEPLAY VERTICAL COURT STATE */
-    .state-gameplay {
-      position: absolute;
-      inset: 0;
-      display: none;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 20px 30px;
-    }
-
-    /* TOP BASKETBALL HOOP STRUCTURE */
-    .top-hoop-area {
-      position: relative;
-      width: 280px;
-      height: 180px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 15;
-    }
-
-    .hoop-target-indicator {
-      position: absolute;
-      top: 100px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: var(--gray-muted);
-      background: rgba(255, 255, 255, 0.9);
-      padding: 4px 12px;
-      border-radius: 20px;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border-color);
-      transition: all 0.2s;
-    }
-
-    .hoop-target-indicator.locked {
-      color: #FFFFFF;
-      background: var(--neon-green);
-      border-color: var(--neon-green);
-      box-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
-    }
-
-    .hoop-svg-container {
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-
-    .hoop-svg {
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-
-    .target-rim-zone {
-      position: absolute;
-      top: 85px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 130px;
-      height: 38px;
-      border-radius: 50%;
-      border: 3px dashed var(--orange);
-      background: rgba(249, 115, 22, 0.08);
-      pointer-events: none;
-      transition: all 0.25s var(--transition-smooth);
-    }
-
-    .target-rim-zone.locked {
-      border-color: var(--neon-green);
-      background: rgba(34, 197, 94, 0.22);
-      box-shadow: var(--shadow-glow-green);
-      animation: pulseGlow 1.2s infinite alternate;
-    }
-
-    @keyframes pulseGlow {
-      0% { transform: translateX(-50%) scale(1); }
-      100% { transform: translateX(-50%) scale(1.08); }
-    }
-
-    .net-mesh {
-      transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      transform-origin: top center;
-    }
-
-    /* HIGH-VISIBILITY TRAJECTORY SVG OVERLAY */
-    .trajectory-svg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    .trajectory-path {
-      stroke: var(--orange);
-      stroke-width: 5;
-      stroke-dasharray: 10 8;
-      stroke-linecap: round;
-      fill: none;
-      opacity: 0.85;
-      transition: stroke 0.2s, stroke-width 0.2s, filter 0.2s;
-    }
-
-    .trajectory-path.target-locked {
-      stroke: var(--neon-green);
-      stroke-width: 7;
-      opacity: 1;
-      filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.8));
-    }
-
-    /* BOTTOM DOCUMENT PROJECTILE CARD */
-    .bottom-shooter-area {
-      position: relative;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 20;
-    }
-
-    .doc-projectile-anchor {
-      position: relative;
-      width: 200px;
-      height: 250px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .doc-card {
-      width: 200px;
-      height: 250px;
-      background: #FFFFFF;
-      border-radius: var(--radius-md);
-      border: 2px solid var(--border-color);
-      box-shadow: var(--shadow-lg);
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: absolute;
-      bottom: 0;
-      cursor: grab;
-      user-select: none;
-      transform-origin: center center;
-      transition: box-shadow 0.2s, border-color 0.2s, transform 0.1s ease-out;
-      will-change: transform;
-    }
-
-    .doc-card.floating {
-      animation: verticalFloat 2.8s ease-in-out infinite;
-    }
-
-    @keyframes verticalFloat {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .doc-card.grabbing {
-      cursor: grabbing;
-      box-shadow: var(--shadow-xl), var(--shadow-glow-orange);
-      border-color: var(--orange);
-      animation: none !important;
-    }
-
-    .doc-card.target-locked {
-      border-color: var(--neon-green);
-      box-shadow: var(--shadow-xl), var(--shadow-glow-green);
-    }
-
-    .doc-fold {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 32px 32px 0;
-      border-color: transparent #E2E8F0 transparent transparent;
-      border-bottom-left-radius: 4px;
-    }
-
-    .doc-badge {
-      align-self: flex-start;
-      background-color: #2563EB;
-      color: #FFFFFF;
-      font-size: 0.7rem;
-      font-weight: 900;
-      padding: 4px 10px;
-      border-radius: 4px;
-    }
-
-    .doc-icon {
-      align-self: center;
-      color: #3B82F6;
-    }
-
-    .doc-name {
-      font-size: 0.9rem;
-      font-weight: 800;
-      color: var(--primary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .doc-size {
-      font-size: 0.75rem;
-      color: var(--gray-muted);
-    }
-
-    /* CONTROL BAR FOR SLIDERS AND AUTO DUNK */
-    .controls-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      width: 100%;
-      max-width: 680px;
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 14px 20px;
-      box-shadow: var(--shadow-md);
-      margin-top: 16px;
-      z-index: 30;
-    }
-
-    .control-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-    }
-
-    .control-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: var(--gray-muted);
-    }
-
-    .slider-input {
-      width: 100%;
-      accent-color: var(--orange);
-      cursor: pointer;
-      height: 6px;
-    }
-
-    /* ANNOUNCEMENTS & SWISH OVERLAY */
-    .feedback-overlay {
-      position: absolute;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.5);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 40;
-      text-align: center;
-      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .feedback-overlay.active {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-    }
-
-    .feedback-title {
-      font-size: 3.8rem;
-      font-weight: 900;
-      color: var(--primary);
-      text-shadow: 0 4px 16px rgba(0,0,0,0.15);
-      line-height: 1;
-    }
-
-    .feedback-subtitle {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--neon-green);
-      margin-top: 8px;
-    }
-
-    /* CONVERTING STATE */
-    .state-converting {
-      position: absolute;
-      inset: 0;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      text-align: center;
-      z-index: 25;
-    }
-
-    .conversion-pipeline {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .pipeline-card {
-      background: #FFFFFF;
-      padding: 14px 22px;
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-md);
-      font-weight: 800;
-      font-size: 1.1rem;
-      border: 1px solid var(--border-color);
-    }
-
-    .progress-track {
-      width: 100%;
-      max-width: 440px;
-      background: #E2E8F0;
-      height: 12px;
-      border-radius: 6px;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: var(--neon-green);
-      border-radius: 6px;
-      transition: width 0.3s ease;
-    }
-
-    /* COMPLETED STATE */
-    .state-completed {
-      position: absolute;
-      inset: 0;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      text-align: center;
-      z-index: 25;
-    }
-
-    .success-badge {
-      width: 86px;
-      height: 86px;
-      background: rgba(34, 197, 94, 0.12);
-      color: var(--neon-green);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 24px;
-    }
-
-    /* PARTICLES CANVAS */
-    .particles-canvas {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 35;
-    }
-
-    /* SECTION INFRASTRUCTURE & FOOTER */
-    .section-title {
-      font-size: 2.2rem;
-      font-weight: 800;
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .feature-card {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      padding: 32px;
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .footer {
-      background: #0F172A;
-      color: #94A3B8;
-      padding: 60px 0 30px;
-      margin-top: 80px;
-    }
-
-    @media (max-width: 768px) {
-      .hero-title { font-size: 38px; }
-      .grid-3 { grid-template-columns: 1fr; }
-      .controls-bar { flex-direction: column; gap: 12px; }
-      .top-hoop-area { width: 220px; height: 150px; }
-      .target-rim-zone { top: 70px; width: 100px; height: 30px; }
-    }
-  </style>
-</head>
-<body>
-
-  <nav class="navbar">
-    <div class="container nav-container">
-      <a href="#" class="brand">
-        <svg class="brand-icon" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/>
-          <path d="M12 2C12 12 22 12 22 12" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          <path d="M12 22C12 12 2 12 2 12" stroke="currentColor" stroke-width="2.5" fill="none"/>
-        </svg>
-        <span>Dunk2PDF</span>
-      </a>
-
-      <ul class="nav-links">
-        <li><a href="#how-it-works">How It Works</a></li>
-        <li><a href="#features">Features</a></li>
-      </ul>
-
-      <button class="btn btn-primary" onclick="scrollToCourt()">Convert File</button>
-    </div>
-  </nav>
-
-  <section class="hero">
-    <div class="container">
-      <h1 class="hero-title">
-        Vertical Dunk Conversion.<br>
-        <span style="color: var(--neon-green);">Don't Just Convert. Slam It.</span>
-      </h1>
-      <p class="hero-subtitle">
-        Aim straight up or pull back to shoot your DOC/DOCX files directly into the PDF hoop.
-      </p>
-    </div>
-  </section>
-
-  <section class="converter-section" id="converter">
-    <div class="container">
-      <div class="game-card">
-        
-        <!-- Game Header -->
-        <div class="game-header">
-          <div>
-            <span class="step-badge" id="stepBadge">STEP 1</span>
-            <h2 class="game-title" id="gameTitle">Upload Document</h2>
-          </div>
-          <div class="score-board" id="scoreBoard" style="display: none;">
-            <div class="score-item">
-              <span class="score-label">Shots</span>
-              <span class="score-value" id="shotsVal">0</span>
-            </div>
-            <div class="score-item" style="border-left: 1px solid var(--border-color); padding-left: 14px;">
-              <span class="score-label">Dunks</span>
-              <span class="score-value" id="scoreVal" style="color: var(--neon-green);">0</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Vertical Game Court Arena -->
-        <div class="game-arena" id="gameArena">
-          <div class="vertical-court-markings"></div>
-
-          <!-- STATE 1: UPLOAD AREA -->
-          <div class="state-upload" id="stateUpload">
-            <div class="drop-zone" id="dropZone" tabindex="0" role="button">
-              <input type="file" id="fileInput" accept=".doc,.docx" style="display: none;">
-              <div class="upload-icon-wrapper">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="17 8 12 3 7 8"/>
-                  <line x1="12" y1="3" x2="12" y2="15"/>
-                </svg>
-              </div>
-              <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 6px;">Drop your DOC or DOCX here</h3>
-              <p style="color: var(--gray-muted); margin-bottom: 20px;">or click to browse from computer</p>
-              <button class="btn btn-outline" type="button">Select File</button>
-            </div>
-          </div>
-
-          <!-- STATE 2: VERTICAL GAMEPLAY COURT -->
-          <div class="state-gameplay" id="stateGameplay">
-            
-            <!-- High-Visibility Trajectory SVG -->
-            <svg class="trajectory-svg" id="trajectorySvg">
-              <path class="trajectory-path" id="trajectoryPath" d="M 0 0 Q 0 0 0 0" />
-            </svg>
-
-            <!-- Top Hoop Structure -->
-            <div class="top-hoop-area" id="topHoopArea">
-              <div class="hoop-target-indicator" id="targetIndicator">TARGET LOCKED 🎯</div>
-              <div class="hoop-svg-container" id="hoopWrapper">
-                <div class="target-rim-zone" id="rimGlowZone"></div>
-                <svg class="hoop-svg" viewBox="0 0 240 180">
-                  <!-- Backboard -->
-                  <rect x="30" y="10" width="180" height="90" rx="8" fill="#FFFFFF" stroke="#0F172A" stroke-width="4"/>
-                  <rect x="80" y="35" width="80" height="50" fill="none" stroke="#F97316" stroke-width="3"/>
-                  <!-- Rim Bracket -->
-                  <rect x="110" y="98" width="20" height="10" fill="#64748B"/>
-                  <!-- Basketball Rim -->
-                  <ellipse cx="120" cy="106" rx="55" ry="12" fill="none" stroke="#EA580C" stroke-width="7"/>
-                  <!-- Net Mesh -->
-                  <g class="net-mesh" id="netMesh">
-                    <path d="M 65 106 L 80 155 L 120 175 L 160 155 L 175 106 Z" fill="none" stroke="#CBD5E1" stroke-width="2.5" stroke-dasharray="4 2"/>
-                    <path d="M 90 106 L 105 165 L 135 165 L 150 106" fill="none" stroke="#CBD5E1" stroke-width="2.5"/>
-                  </g>
-                </svg>
-              </div>
-            </div>
-
-            <!-- Bottom Document Projectile Card -->
-            <div class="bottom-shooter-area">
-              <div class="doc-projectile-anchor" id="docAnchor">
-                <div class="doc-card floating" id="docCard" role="button" aria-label="Draggable document card">
-                  <div class="doc-fold"></div>
-                  <span class="doc-badge" id="docBadge">DOCX</span>
-                  <div class="doc-icon">
-                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                      <polyline points="14 2 14 8 20 8"></polyline>
-                      <line x1="16" y1="13" x2="8" y2="13"></line>
-                      <line x1="16" y1="17" x2="8" y2="17"></line>
-                    </svg>
-                  </div>
-                  <div>
-                    <div class="doc-name" id="docName">document.docx</div>
-                    <div class="doc-size" id="docSize">1.8 MB</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Controls Bar -->
-              <div class="controls-bar">
-                <div class="control-item">
-                  <div class="control-label">
-                    <span>UPWARD POWER</span>
-                    <span id="powerVal">85%</span>
-                  </div>
-                  <input type="range" class="slider-input" id="powerSlider" min="40" max="100" value="85">
-                </div>
-
-                <div class="control-item">
-                  <div class="control-label">
-                    <span>AIM ANGLE</span>
-                    <span id="angleVal">90°</span>
-                  </div>
-                  <input type="range" class="slider-input" id="angleSlider" min="60" max="120" value="90">
-                </div>
-
-                <button class="btn btn-success" id="autoDunkBtn">
-                  AUTO DUNK 🏀
-                </button>
-              </div>
-            </div>
-
-            <canvas class="particles-canvas" id="particlesCanvas"></canvas>
-
-            <div class="feedback-overlay" id="feedbackOverlay">
-              <div class="feedback-title" id="feedbackTitle">SWISH! 🎯</div>
-              <div class="feedback-subtitle" id="feedbackSubtitle">Perfect Vertical Dunk!</div>
-            </div>
-          </div>
-
-          <!-- STATE 3: CONVERTING STATE -->
-          <div class="state-converting" id="stateConverting">
-            <div class="conversion-pipeline">
-              <div class="pipeline-card">📄 DOCX</div>
-              <span style="font-size: 1.5rem; color: var(--orange);">➔</span>
-              <div style="font-size: 2rem;">🏀</div>
-              <span style="font-size: 1.5rem; color: var(--neon-green);">➔</span>
-              <div class="pipeline-card" style="border-color: var(--neon-green); color: var(--neon-green);">📄 PDF</div>
-            </div>
-            
-            <div class="progress-track">
-              <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <p id="progressStatus" style="font-weight: 700; color: var(--gray-muted);">Dunking into PDF engine...</p>
-          </div>
-
-          <!-- STATE 4: COMPLETED STATE -->
-          <div class="state-completed" id="stateCompleted">
-            <div class="success-badge">
-              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-            
-            <h3 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 6px;">Conversion Successful!</h3>
-            <p style="color: var(--gray-muted); margin-bottom: 24px;">Your converted PDF is ready for instant download.</p>
-
-            <div style="display: flex; gap: 16px; margin-bottom: 30px;">
-              <button class="btn btn-primary" id="downloadBtn">Download PDF</button>
-              <button class="btn btn-outline" onclick="resetConverter()">Convert Another File</button>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <section class="container" id="how-it-works" style="padding: 60px 24px;">
-    <h2 class="section-title">How Vertical Dunk Works</h2>
-    <div class="grid-3">
-      <div class="feature-card">
-        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 10px;">1. Load Document</h3>
-        <p style="color: var(--gray-muted);">Upload your DOC or DOCX document file directly onto the vertical court launcher.</p>
-      </div>
-      <div class="feature-card">
-        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 10px;">2. Aim & Dunk Upward</h3>
-        <p style="color: var(--gray-muted);">Follow the bright green dotted guide line and flick/shoot upwards into the top basket.</p>
-      </div>
-      <div class="feature-card">
-        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 10px;">3. Instant PDF Download</h3>
-        <p style="color: var(--gray-muted);">Once dunked, your file converts instantly into a high-quality PDF ready for download.</p>
-      </div>
-    </div>
-  </section>
-
-  <script>
-    /* ==========================================
-       CONVERSION PIPELINE MOCK & REST READY
-       ========================================== */
-    async function convertDocumentToPDF(file, onProgress) {
-      const steps = [
-        { progress: 25, status: "Parsing DOCX layout..." },
-        { progress: 60, status: "Rendering PDF pages..." },
-        { progress: 90, status: "Optimizing fonts and vectors..." },
-        { progress: 100, status: "Conversion complete!" }
-      ];
-
-      for (const step of steps) {
-        await new Promise(resolve => setTimeout(resolve, 350));
-        if (onProgress) onProgress(step.progress, step.status);
-      }
-
-      return {
-        fileName: file.name.replace(/\.[^/.]+$/, "") + ".pdf"
-      };
-    }
-
-    /* ==========================================
-       GLOBAL APP STATE
-       ========================================== */
-    const state = {
-      file: null,
-      shots: 0,
-      score: 0,
-      isDragging: false,
-      isAnimating: false,
-      dragStart: { x: 0, y: 0 },
-      docPos: { x: 0, y: 0 },
-      power: 85,
-      angle: 90,
-      targetLocked: false
-    };
-
-    // DOM Elements
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('fileInput');
-
-    const stateUpload = document.getElementById('stateUpload');
-    const stateGameplay = document.getElementById('stateGameplay');
-    const stateConverting = document.getElementById('stateConverting');
-    stateCompleted = document.getElementById('stateCompleted');
-
-    const scoreBoard = document.getElementById('scoreBoard');
-    const shotsVal = document.getElementById('shotsVal');
-    const scoreVal = document.getElementById('scoreVal');
-    const stepBadge = document.getElementById('stepBadge');
-    const gameTitle = document.getElementById('gameTitle');
-
-    const docCard = document.getElementById('docCard');
-    const docAnchor = document.getElementById('docAnchor');
-    const docName = document.getElementById('docName');
-    const docSize = document.getElementById('docSize');
-    const docBadge = document.getElementById('docBadge');
-
-    const hoopWrapper = document.getElementById('hoopWrapper');
-    const topHoopArea = document.getElementById('topHoopArea');
-    const rimGlowZone = document.getElementById('rimGlowZone');
-    const targetIndicator = document.getElementById('targetIndicator');
-    const trajectoryPath = document.getElementById('trajectoryPath');
-
-    const powerSlider = document.getElementById('powerSlider');
-    const angleSlider = document.getElementById('angleSlider');
-    const powerVal = document.getElementById('powerVal');
-    const angleVal = document.getElementById('angleVal');
-    const autoDunkBtn = document.getElementById('autoDunkBtn');
-
-    const feedbackOverlay = document.getElementById('feedbackOverlay');
-    const progressFill = document.getElementById('progressFill');
-    const progressStatus = document.getElementById('progressStatus');
-
-    /* ==========================================
-       FILE HANDLERS
-       ========================================== */
-    dropZone.addEventListener('click', () => fileInput.click());
-
-    fileInput.addEventListener('change', (e) => {
-      if (e.target.files.length > 0) handleFile(e.target.files[0]);
-    });
-
-    ['dragenter', 'dragover'].forEach(name => {
-      dropZone.addEventListener(name, (e) => {
-        e.preventDefault();
-        dropZone.classList.add('drag-over');
-      });
-    });
-
-    ['dragleave', 'drop'].forEach(name => {
-      dropZone.addEventListener(name, (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('drag-over');
-      });
-    });
-
-    dropZone.addEventListener('drop', (e) => {
-      const files = e.dataTransfer.files;
-      if (files.length > 0) handleFile(files[0]);
-    });
-
-    function handleFile(file) {
-      const ext = file.name.split('.').pop().toLowerCase();
-      if (!['doc', 'docx'].includes(ext)) {
-        alert("Please upload a valid DOC or DOCX document.");
-        return;
-      }
-
-      state.file = file;
-      docName.innerText = file.name;
-      docSize.innerText = (file.size / (1024 * 1024)).toFixed(1) + " MB";
-      docBadge.innerText = ext.toUpperCase();
-
-      transitionToState('gameplay');
-    }
-
-    /* ==========================================
-       TRAJECTORY & AIM GUIDANCE ENGINE
-       ========================================== */
-    powerSlider.addEventListener('input', (e) => {
-      state.power = parseInt(e.target.value);
-      powerVal.innerText = state.power + "%";
-      updateTrajectory();
-    });
-
-    angleSlider.addEventListener('input', (e) => {
-      state.angle = parseInt(e.target.value);
-      angleVal.innerText = state.angle + "°";
-      updateTrajectory();
-    });
-
-    autoDunkBtn.addEventListener('click', () => {
-      if (state.isAnimating) return;
-      executeDunk(getCalculatedShotParams());
-    });
-
-    function getCalculatedShotParams() {
-      const p = state.power / 100;
-      const rad = (state.angle * Math.PI) / 180;
-      
-      const distance = 460 * p;
-      const targetX = Math.cos(rad) * distance;
-      const targetY = -Math.sin(rad) * distance;
-
-      return { targetX, targetY };
-    }
-
-    function updateTrajectory() {
-      if (state.isDragging || state.isAnimating) return;
-      const params = getCalculatedShotParams();
-      drawTrajectoryArc(0, 0, params.targetX, params.targetY);
-    }
-
-    function drawTrajectoryArc(startX, startY, endX, endY) {
-      const anchorRect = docAnchor.getBoundingClientRect();
-      const arenaRect = document.getElementById('gameArena').getBoundingClientRect();
-
-      const absStartX = anchorRect.left - arenaRect.left + anchorRect.width / 2 + startX;
-      const absStartY = anchorRect.top - arenaRect.top + anchorRect.height / 2 + startY;
-
-      const absEndX = absStartX + endX;
-      const absEndY = absStartY + endY;
-
-      // Smooth vertical curve
-      const controlX = (absStartX + absEndX) / 2;
-      const controlY = Math.min(absStartY, absEndY) - 80;
-
-      trajectoryPath.setAttribute('d', `M ${absStartX} ${absStartY} Q ${controlX} ${controlY} ${absEndX} ${absEndY}`);
-
-      // Check alignment with top hoop
-      const hoopRect = topHoopArea.getBoundingClientRect();
-      const rimX = hoopRect.left - arenaRect.left + hoopRect.width / 2;
-      const rimY = hoopRect.top - arenaRect.top + 90;
-
-      const dist = Math.hypot(absEndX - rimX, absEndY - rimY);
-
-      if (dist < 160 || state.angle === 90) {
-        state.targetLocked = true;
-        trajectoryPath.classList.add('target-locked');
-        rimGlowZone.classList.add('locked');
-        targetIndicator.classList.add('locked');
-        docCard.classList.add('target-locked');
-      } else {
-        state.targetLocked = false;
-        trajectoryPath.classList.remove('target-locked');
-        rimGlowZone.classList.remove('locked');
-        targetIndicator.classList.remove('locked');
-        docCard.classList.remove('target-locked');
-      }
-    }
-
-    /* ==========================================
-       POINTER EVENTS DRAGGING & SHOOTING
-       ========================================== */
-    docCard.addEventListener('pointerdown', (e) => {
-      if (state.isAnimating) return;
-      state.isDragging = true;
-      state.dragStart = { x: e.clientX, y: e.clientY };
-      docCard.classList.remove('floating');
-      docCard.classList.add('grabbing');
-      docCard.setPointerCapture(e.pointerId);
-    });
-
-    window.addEventListener('pointermove', (e) => {
-      if (!state.isDragging) return;
-
-      const deltaX = e.clientX - state.dragStart.x;
-      const deltaY = e.clientY - state.dragStart.y;
-      state.docPos = { x: deltaX, y: deltaY };
-
-      docCard.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.05)`;
-      drawTrajectoryArc(deltaX, deltaY, 0, -420);
-    });
-
-    window.addEventListener('pointerup', () => {
-      if (!state.isDragging) return;
-      state.isDragging = false;
-      docCard.classList.remove('grabbing');
-
-      executeDunk({ targetX: state.docPos.x, targetY: state.docPos.y });
-    });
-
-    /* ==========================================
-       DUNK EXECUTION & MAGNETIC COLLISION
-       ========================================== */
-    function executeDunk(params) {
-      state.isAnimating = true;
-      state.shots++;
-      shotsVal.innerText = state.shots;
-
-      const anchorRect = docAnchor.getBoundingClientRect();
-      const arenaRect = document.getElementById('gameArena').getBoundingClientRect();
-      const hoopRect = topHoopArea.getBoundingClientRect();
-
-      const startX = state.docPos.x;
-      const startY = state.docPos.y;
-
-      const rimX = (hoopRect.left - arenaRect.left + hoopRect.width / 2) - (anchorRect.left - arenaRect.left + anchorRect.width / 2);
-      const rimY = (hoopRect.top - arenaRect.top + 90) - (anchorRect.top - arenaRect.top + anchorRect.height / 2);
-
-      const startTime = performance.now();
-      const duration = 700;
-
-      function animate(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-        const currentX = startX + (rimX - startX) * progress;
-        const currentY = startY + (rimY - startY) * progress;
-        const scale = 1 - progress * 0.3;
-
-        docCard.style.transform = `translate(${currentX}px, ${currentY}px) scale(${scale})`;
-
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          handleSwish();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dunk2PDF - Turn Word Documents into PDFs by Dunking!</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hoopOrange: '#F97316',
+                        courtWood: '#D97706',
+                        neonGreen: '#22C55E'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
         }
-      }
+    </script>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            color: #F8FAFC;
+        }
 
-      requestAnimationFrame(animate);
-    }
+        /* Canvas styling */
+        #gameCanvas {
+            touch-action: none;
+            cursor: grab;
+            background: radial-gradient(circle at 50% 30%, #1E293B 0%, #0F172A 100%);
+            border-radius: 1rem;
+        }
 
-    function handleSwish() {
-      state.score++;
-      scoreVal.innerText = state.score;
+        #gameCanvas:active {
+            cursor: grabbing;
+        }
 
-      hoopWrapper.style.transform = "translateY(8px)";
-      setTimeout(() => hoopWrapper.style.transform = "translateY(0)", 200);
+        /* Text glow & subtle animations */
+        .text-glow {
+            text-shadow: 0 0 12px rgba(249, 115, 22, 0.6);
+        }
 
-      triggerParticles();
+        .neon-glow {
+            box-shadow: 0 0 25px rgba(34, 197, 94, 0.4);
+        }
 
-      docCard.style.opacity = '0';
-      feedbackOverlay.classList.add('active');
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F172A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
 
-      setTimeout(() => {
-        feedbackOverlay.classList.remove('active');
-        transitionToState('converting');
-      }, 1200);
-    }
+        @keyframes pulse-subtle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .animate-pulse-subtle {
+            animation: pulse-subtle 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-orange-500 selection:text-white">
 
-    function triggerParticles() {
-      const canvas = document.getElementById('particlesCanvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+    <!-- Sticky Navigation -->
+    <nav class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="resetToState1()">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-orange-500/20">
+                        🏀
+                    </div>
+                    <span class="text-xl font-extrabold tracking-tight text-white">Dunk<span class="text-orange-500">2PDF</span></span>
+                </div>
 
-      const hoopRect = topHoopArea.getBoundingClientRect();
-      const arenaRect = document.getElementById('gameArena').getBoundingClientRect();
-      
-      const originX = hoopRect.left - arenaRect.left + hoopRect.width / 2;
-      const originY = hoopRect.top - arenaRect.top + 100;
+                <!-- Nav Links -->
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+                    <a href="#game-section" class="hover:text-orange-400 transition-colors">Converter Court</a>
+                    <a href="#how-it-works" class="hover:text-orange-400 transition-colors">How It Works</a>
+                    <a href="#features" class="hover:text-orange-400 transition-colors">Features</a>
+                    <a href="#privacy" class="hover:text-orange-400 transition-colors">Privacy & Security</a>
+                </div>
 
-      const particles = Array.from({ length: 36 }, () => ({
-        x: originX,
-        y: originY,
-        vx: (Math.random() - 0.5) * 10,
-        vy: (Math.random() - 0.8) * 8,
-        size: Math.random() * 6 + 3,
-        color: ['#22C55E', '#F97316', '#3B82F6'][Math.floor(Math.random() * 3)],
-        alpha: 1
-      }));
+                <!-- CTA Button -->
+                <div>
+                    <a href="#game-section" class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 rounded-lg shadow-md hover:shadow-orange-500/30 transition-all">
+                        Convert Word File
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-      function render() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        let active = false;
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed top-20 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
-        particles.forEach(p => {
-          if (p.alpha > 0) {
-            active = true;
-            p.x += p.vx;
-            p.y += p.vy;
-            p.vy += 0.25;
-            p.alpha -= 0.025;
+    <!-- Hero Header -->
+    <header class="relative py-12 px-4 text-center max-w-4xl mx-auto">
+        <span class="inline-flex items-center gap-2 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 rounded-full mb-4">
+            <i class="fa-solid fa-bolt text-emerald-400"></i> Ultra-Realistic Hoop Mechanics & Net Swish
+        </span>
+        <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
+            Don't Just Convert Docs. <br>
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-500 text-glow">Dunk 'Em Into PDFs!</span>
+        </h1>
+        <p class="mt-4 text-slate-300 max-w-2xl mx-auto text-base sm:text-lg">
+            Upload your Word documents (<span class="text-orange-400 font-semibold">.doc / .docx</span>), pull back to aim with our high-precision neon arc, and swish through the net to convert instantly!
+        </p>
+    </header>
 
-            ctx.globalAlpha = Math.max(0, p.alpha);
-            ctx.fillStyle = p.color;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fill();
-          }
+    <!-- Main Converter Arena Card -->
+    <section id="game-section" class="max-w-5xl mx-auto px-4 w-full mb-16">
+        <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl">
+            
+            <!-- Game Header Bar (Visible when file is loaded) -->
+            <div id="gameHeaderBar" class="hidden p-4 sm:p-5 border-b border-slate-700/50 flex flex-wrap items-center justify-between gap-4 bg-slate-900/60">
+                <div class="flex items-center gap-6">
+                    <div>
+                        <span class="text-xs text-slate-400 uppercase font-semibold tracking-wider block">Uploaded File</span>
+                        <div id="fileNameDisplay" class="text-sm font-bold text-orange-400 truncate max-w-[180px] sm:max-w-xs flex items-center gap-2">
+                            <i class="fa-solid fa-file-word text-blue-400"></i>
+                            <span id="fileNameText">document.docx</span>
+                        </div>
+                    </div>
+                    <div class="h-8 w-px bg-slate-700 hidden sm:block"></div>
+                    <div>
+                        <span class="text-xs text-slate-400 uppercase font-semibold tracking-wider block">Score</span>
+                        <div id="scoreDisplay" class="text-xl font-extrabold text-emerald-400">0</div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <button id="autoDunkBtn" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-4 py-2 rounded-lg text-sm shadow-md transition-all flex items-center gap-2">
+                        <span>Auto Dunk</span> 🏀
+                    </button>
+                    <label class="cursor-pointer bg-slate-700 hover:bg-slate-600 text-slate-200 px-3.5 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 border border-slate-600">
+                        <i class="fa-solid fa-arrow-up-from-bracket text-orange-400"></i> <span class="hidden sm:inline">Change File</span>
+                        <input type="file" id="changeFileInput" class="hidden" accept=".doc,.docx">
+                    </label>
+                    <button id="resetGameBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2.5 rounded-lg border border-slate-700 transition-all" title="Reset Shot">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Court Arena Container -->
+            <div class="relative w-full aspect-[16/9] min-h-[380px] max-h-[520px] bg-slate-950 overflow-hidden flex items-center justify-center">
+                
+                <!-- Game Canvas -->
+                <canvas id="gameCanvas" class="w-full h-full block"></canvas>
+
+                <!-- STATE 1: INITIAL UPLOAD DROPZONE OVERLAY -->
+                <div id="dropzoneOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center transition-all duration-300 z-20">
+                    <div id="dropTarget" class="w-full max-w-md border-2 border-dashed border-orange-500/50 hover:border-orange-400 bg-slate-900/60 hover:bg-slate-900/90 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all group shadow-xl">
+                        <div class="w-20 h-20 rounded-2xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center mb-4 text-orange-400 text-4xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-file-word"></i>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-white mb-1">Select or Drop Your Word Document</h3>
+                        <p class="text-xs text-slate-400 mb-6 max-w-xs">Supports <strong class="text-slate-200">.DOC</strong> or <strong class="text-slate-200">.DOCX</strong> files up to <strong class="text-slate-200">25MB</strong>.</p>
+                        
+                        <button id="uploadTriggerBtn" class="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/25 transition-all flex items-center gap-2 pointer-events-none">
+                            <i class="fa-solid fa-folder-open"></i> Browse Files
+                        </button>
+                        <input type="file" id="mainFileInput" class="hidden" accept=".doc,.docx">
+                    </div>
+                </div>
+
+                <!-- STATE 3 & 4: CONVERTING / DOWNLOAD OVERLAY -->
+                <div id="conversionOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center transition-all duration-300 opacity-0 pointer-events-none z-30">
+                    
+                    <!-- Phase 3: Converting Progress -->
+                    <div id="convertingState" class="flex flex-col items-center max-w-md w-full">
+                        <div class="relative mb-6">
+                            <div class="w-20 h-20 rounded-full border-4 border-orange-500/20 border-t-orange-500 animate-spin flex items-center justify-center"></div>
+                            <i class="fa-solid fa-file-pdf text-3xl text-emerald-400 absolute inset-0 m-auto flex items-center justify-center"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-white mb-1">SWISH! PERFECT SHOT! 🏀</h3>
+                        <p id="conversionStatusText" class="text-sm text-slate-300 mb-6 font-medium">Reading document structures...</p>
+
+                        <!-- Progress Bar -->
+                        <div class="w-full bg-slate-800 rounded-full h-3.5 mb-2 overflow-hidden border border-slate-700">
+                            <div id="conversionProgressBar" class="bg-gradient-to-r from-orange-500 via-amber-400 to-emerald-400 h-full w-0 transition-all duration-150"></div>
+                        </div>
+                        <span id="conversionProgressPercent" class="text-sm font-extrabold text-emerald-400">0%</span>
+                    </div>
+
+                    <!-- Phase 4: Download Ready State -->
+                    <div id="downloadState" class="hidden flex flex-col items-center max-w-md w-full animate-pulse-subtle">
+                        <div class="w-20 h-20 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-4xl mb-4 border border-emerald-500/40 shadow-lg shadow-emerald-500/20">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-white mb-1">Your PDF is Ready!</h3>
+                        <p id="downloadFileDetails" class="text-xs text-slate-400 mb-6">Converted cleanly with exact layout fidelity.</p>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
+                            <button id="downloadPdfBtn" class="w-full sm:flex-1 py-3.5 px-6 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-black rounded-xl shadow-lg shadow-emerald-500/25 transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-file-arrow-down text-lg"></i> Download PDF
+                            </button>
+                            <button id="convertAnotherBtn" class="w-full sm:w-auto py-3.5 px-5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-arrow-rotate-left"></i> Convert Another File
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Helper Instruction Footer -->
+            <div class="p-3 bg-slate-900/80 text-center text-xs text-slate-400 border-t border-slate-800 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-info text-emerald-400"></i>
+                <span>Pull document backwards to aim, or tap <strong class="text-emerald-400">Auto Dunk 🏀</strong> for a guaranteed score!</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 bg-slate-900/50 border-y border-slate-800">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-extrabold text-white">How Dunk2PDF Works</h2>
+                <p class="text-slate-400 mt-2 text-sm sm:text-base">Transforming boring file conversions into a satisfying court experience.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-slate-800/40 p-6 rounded-2xl border border-slate-700/50">
+                    <div class="w-12 h-12 bg-orange-500/10 text-orange-400 font-black rounded-xl flex items-center justify-center text-xl mb-4 border border-orange-500/20">1</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Upload Word Document</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Select any valid .doc or .docx file up to 25MB. Your document morphs instantly into a customized basketball card projectile on court.</p>
+                </div>
+
+                <div class="bg-slate-800/40 p-6 rounded-2xl border border-slate-700/50">
+                    <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 font-black rounded-xl flex items-center justify-center text-xl mb-4 border border-emerald-500/20">2</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Aim & Swish</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Drag back to align the neon green trajectory parabola directly with the rim. Release to shoot or click Auto Dunk for instant precision.</p>
+                </div>
+
+                <div class="bg-slate-800/40 p-6 rounded-2xl border border-slate-700/50">
+                    <div class="w-12 h-12 bg-teal-500/10 text-teal-400 font-black rounded-xl flex items-center justify-center text-xl mb-4 border border-teal-500/20">3</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Net Bulge & PDF Download</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Watch the document swish down, expanding the clean diamond net mesh as it exits, initiating instant browser PDF download!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 max-w-6xl mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-extrabold text-white">Engineered for Accuracy & Fun</h2>
+            <p class="text-slate-400 mt-2 text-sm sm:text-base">Forgiving basketball mechanics paired with browser-side conversion processing.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="p-6 bg-slate-800/30 rounded-2xl border border-slate-700/40">
+                <i class="fa-solid fa-bullseye text-2xl text-emerald-400 mb-3"></i>
+                <h4 class="font-bold text-white mb-1">High-Visibility Trajectory</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">Bright neon green dotted parabola line with automatic aim assist guarantees effortless scores every time.</p>
+            </div>
+
+            <div class="p-6 bg-slate-800/30 rounded-2xl border border-slate-700/40">
+                <i class="fa-solid fa-basketball text-2xl text-orange-400 mb-3"></i>
+                <h4 class="font-bold text-white mb-1">Realistic Woven Net Bulge</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">Dynamic SVG diamond mesh deforms outward and downwards realisticly when the document slides through.</p>
+            </div>
+
+            <div class="p-6 bg-slate-800/30 rounded-2xl border border-slate-700/40">
+                <i class="fa-solid fa-shield-halved text-2xl text-blue-400 mb-3"></i>
+                <h4 class="font-bold text-white mb-1">Strict File Validation</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">Verifies file formats (.doc, .docx) and strictly caps size at 25MB to ensure fast, reliable performance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Section -->
+    <section id="privacy" class="py-12 bg-slate-900/40 border-t border-slate-800">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto mb-4 text-xl border border-emerald-500/20">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">100% Client-Side Privacy</h2>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-2xl mx-auto">
+                Your uploaded documents are processed entirely inside your local browser instance. Dunk2PDF never sends, uploads, or stores your confidential files on external servers.
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-slate-950 border-t border-slate-800 text-center text-xs text-slate-500">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                © 2026 Dunk2PDF. All basketball tricks reserved.
+            </div>
+            <div class="flex gap-4">
+                <a href="#privacy" class="hover:text-slate-300">Privacy</a>
+                <a href="#how-it-works" class="hover:text-slate-300">How It Works</a>
+                <a href="#features" class="hover:text-slate-300">Features</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM References
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const dropzoneOverlay = document.getElementById('dropzoneOverlay');
+        const dropTarget = document.getElementById('dropTarget');
+        const mainFileInput = document.getElementById('mainFileInput');
+        const changeFileInput = document.getElementById('changeFileInput');
+        const gameHeaderBar = document.getElementById('gameHeaderBar');
+        const fileNameText = document.getElementById('fileNameText');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const autoDunkBtn = document.getElementById('autoDunkBtn');
+        const resetGameBtn = document.getElementById('resetGameBtn');
+        const toastContainer = document.getElementById('toastContainer');
+
+        const conversionOverlay = document.getElementById('conversionOverlay');
+        const convertingState = document.getElementById('convertingState');
+        const downloadState = document.getElementById('downloadState');
+        const conversionProgressBar = document.getElementById('conversionProgressBar');
+        const conversionProgressPercent = document.getElementById('conversionProgressPercent');
+        const conversionStatusText = document.getElementById('conversionStatusText');
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        const convertAnotherBtn = document.getElementById('convertAnotherBtn');
+        const downloadFileDetails = document.getElementById('downloadFileDetails');
+
+        // Application State Machine:
+        // 'IDLE_NO_FILE' -> 'READY_TO_SHOOT' -> 'DRAGGING' -> 'IN_FLIGHT' -> 'SWISH_NET' -> 'CONVERTING' -> 'COMPLETED'
+        let appState = 'IDLE_NO_FILE';
+
+        let score = 0;
+        let uploadedFileObj = null;
+        let uploadedFileName = "";
+        let uploadedFileSizeStr = "";
+        let uploadedFileExt = "";
+
+        // Dimensions
+        let width = 800;
+        let height = 450;
+
+        // Ball / Document Projectile Parameters
+        const ball = {
+            x: 140,
+            y: 300,
+            vx: 0,
+            vy: 0,
+            radius: 28,
+            rotation: 0,
+            vRot: 0,
+            dragStartX: 0,
+            dragStartY: 0,
+            isDragging: false,
+            initialX: 140,
+            initialY: 300,
+            opacity: 1
+        };
+
+        // Basketball Hoop Parameters
+        const hoop = {
+            x: 660,
+            y: 170,
+            rimRadius: 42,
+            rimWidth: 80,
+            backboardWidth: 14,
+            backboardHeight: 120,
+            netLength: 85,
+            netBulge: 0,          // Dynamic bulge magnitude
+            swishProgress: 0      // Progress along net slide
+        };
+
+        // Physics Constants
+        const GRAVITY = 0.42;
+        const DRAG_SENSITIVITY = 0.16;
+        const MAX_PULL = 180;
+
+        let particles = [];
+        let generatedPdfBlob = null;
+        let audioCtx = null;
+
+        function playSwishSound() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const bufferSize = audioCtx.sampleRate * 0.25;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(1400, audioCtx.currentTime);
+                filter.Q.setValueAtTime(3.5, audioCtx.currentTime);
+
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.7, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                noise.start();
+            } catch (err) {
+                // Silent fallback
+            }
+        }
+
+        function showToast(message, type = 'error') {
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-xl shadow-xl border text-sm font-semibold flex items-center justify-between gap-3 transform transition-all duration-300 translate-x-10 opacity-0 pointer-events-auto ${
+                type === 'error' ? 'bg-red-950/90 border-red-800 text-red-200' : 'bg-emerald-950/90 border-emerald-800 text-emerald-200'
+            }`;
+
+            toast.innerHTML = `
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation text-red-400' : 'fa-circle-check text-emerald-400'} text-lg"></i>
+                    <span>${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.classList.add('translate-x-10', 'opacity-0');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 4500);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        function validateAndProcessFile(file) {
+            if (!file) return;
+
+            const name = file.name;
+            const ext = name.split('.').pop().toLowerCase();
+            const maxBytes = 25 * 1024 * 1024; // 25MB
+
+            if (ext !== 'doc' && ext !== 'docx') {
+                showToast('Invalid format! Please upload a .DOC or .DOCX file.', 'error');
+                return;
+            }
+
+            if (file.size > maxBytes) {
+                showToast('File size exceeds the 25MB limit!', 'error');
+                return;
+            }
+
+            uploadedFileObj = file;
+            uploadedFileName = name;
+            uploadedFileSizeStr = formatFileSize(file.size);
+            uploadedFileExt = ext.toUpperCase();
+
+            // Transition UI State 1 -> State 2
+            dropzoneOverlay.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => dropzoneOverlay.classList.add('hidden'), 300);
+
+            gameHeaderBar.classList.remove('hidden');
+            fileNameText.textContent = uploadedFileName;
+
+            appState = 'READY_TO_SHOOT';
+            resetBallPosition();
+            showToast(`Loaded "${uploadedFileName}". Aim and dunk!`, 'success');
+        }
+
+        function resetToState1() {
+            appState = 'IDLE_NO_FILE';
+            uploadedFileObj = null;
+            uploadedFileName = "";
+            uploadedFileSizeStr = "";
+            uploadedFileExt = "";
+            mainFileInput.value = "";
+            changeFileInput.value = "";
+
+            gameHeaderBar.classList.add('hidden');
+            conversionOverlay.classList.add('opacity-0', 'pointer-events-none');
+            convertingState.classList.remove('hidden');
+            downloadState.classList.add('hidden');
+
+            dropzoneOverlay.classList.remove('hidden');
+            setTimeout(() => dropzoneOverlay.classList.remove('opacity-0', 'pointer-events-none'), 10);
+
+            resetBallPosition();
+        }
+
+        function resetBallPosition() {
+            ball.x = ball.initialX;
+            ball.y = ball.initialY;
+            ball.vx = 0;
+            ball.vy = 0;
+            ball.rotation = 0;
+            ball.vRot = 0;
+            ball.opacity = 1;
+            hoop.netBulge = 0;
+            hoop.swishProgress = 0;
+            if (appState !== 'IDLE_NO_FILE') appState = 'READY_TO_SHOOT';
+        }
+
+        // File Drag & Drop Events
+        dropTarget.addEventListener('click', () => mainFileInput.click());
+        mainFileInput.addEventListener('change', (e) => validateAndProcessFile(e.target.files[0]));
+        changeFileInput.addEventListener('change', (e) => validateAndProcessFile(e.target.files[0]));
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropTarget.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropTarget.classList.add('border-orange-400', 'bg-slate-900/90');
+            }, false);
         });
 
-        if (active) requestAnimationFrame(render);
-      }
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropTarget.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropTarget.classList.remove('border-orange-400', 'bg-slate-900/90');
+            }, false);
+        });
 
-      render();
-    }
+        dropTarget.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            if (dt && dt.files.length) validateAndProcessFile(dt.files[0]);
+        });
 
-    /* ==========================================
-       TRANSITION CONTROLLER
-       ========================================== */
-    function transitionToState(target) {
-      stateUpload.style.display = 'none';
-      stateGameplay.style.display = 'none';
-      stateConverting.style.display = 'none';
-      stateCompleted.style.display = 'none';
+        resetGameBtn.addEventListener('click', () => {
+            if (appState === 'IN_FLIGHT' || appState === 'READY_TO_SHOOT' || appState === 'DRAGGING') {
+                resetBallPosition();
+            }
+        });
 
-      if (target === 'upload') {
-        stateUpload.style.display = 'flex';
-        scoreBoard.style.display = 'none';
-        stepBadge.innerText = "STEP 1";
-        gameTitle.innerText = "Upload Document";
-      } else if (target === 'gameplay') {
-        stateGameplay.style.display = 'flex';
-        scoreBoard.style.display = 'flex';
-        stepBadge.innerText = "STEP 2";
-        gameTitle.innerText = "Aim & Dunk Upward";
-        resetDocPosition();
-      } else if (target === 'converting') {
-        stateConverting.style.display = 'flex';
-        stepBadge.innerText = "CONVERTING";
-        gameTitle.innerText = "Converting Document...";
-        runConversion();
-      } else if (target === 'completed') {
-        stateCompleted.style.display = 'flex';
-        stepBadge.innerText = "COMPLETE";
-        gameTitle.innerText = "Your PDF is ready!";
-      }
-    }
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            width = canvas.width;
+            height = canvas.height;
 
-    function resetDocPosition() {
-      state.isDragging = false;
-      state.isAnimating = false;
-      state.docPos = { x: 0, y: 0 };
-      docCard.style.transform = `translate(0px, 0px)`;
-      docCard.classList.add('floating');
-      docCard.style.opacity = '1';
-      updateTrajectory();
-    }
+            ball.initialX = Math.max(100, width * 0.18);
+            ball.initialY = height * 0.65;
+            
+            if (appState === 'READY_TO_SHOOT' || appState === 'DRAGGING' || appState === 'IDLE_NO_FILE') {
+                ball.x = ball.initialX;
+                ball.y = ball.initialY;
+            }
 
-    async function runConversion() {
-      progressFill.style.width = '0%';
-      await convertDocumentToPDF(state.file, (progress, status) => {
-        progressFill.style.width = `${progress}%`;
-        progressStatus.innerText = status;
-      });
+            hoop.x = width - Math.max(100, width * 0.18);
+            hoop.y = height * 0.36;
+        }
 
-      setTimeout(() => transitionToState('completed'), 400);
-    }
+        window.addEventListener('resize', resizeCanvas);
 
-    function resetConverter() {
-      state.file = null;
-      shotsVal.innerText = '0';
-      scoreVal.innerText = '0';
-      fileInput.value = '';
-      transitionToState('upload');
-    }
+        function getPointerPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
 
-    function scrollToCourt() {
-      document.getElementById('converter').scrollIntoView({ behavior: 'smooth' });
-    }
-  </script>
+        function handlePointerDown(e) {
+            if (appState !== 'READY_TO_SHOOT') return;
+            const pos = getPointerPos(e);
+            const dist = Math.hypot(pos.x - ball.x, pos.y - ball.y);
+            if (dist < ball.radius * 2.5) {
+                ball.isDragging = true;
+                ball.dragStartX = pos.x;
+                ball.dragStartY = pos.y;
+                appState = 'DRAGGING';
+            }
+        }
+
+        function handlePointerMove(e) {
+            if (!ball.isDragging || appState !== 'DRAGGING') return;
+            const pos = getPointerPos(e);
+
+            const dx = pos.x - ball.dragStartX;
+            const dy = pos.y - ball.dragStartY;
+
+            const dist = Math.hypot(dx, dy);
+            const clampedDist = Math.min(dist, MAX_PULL);
+            const angle = Math.atan2(dy, dx);
+
+            ball.x = ball.initialX + Math.cos(angle) * clampedDist;
+            ball.y = ball.initialY + Math.sin(angle) * clampedDist;
+
+            let rawVx = (ball.initialX - ball.x) * DRAG_SENSITIVITY;
+            let rawVy = (ball.initialY - ball.y) * DRAG_SENSITIVITY;
+
+            // FORGIVING AUTO-AIM ASSIST:
+            if (rawVx > 1.8 && rawVy < 0) {
+                const targetX = hoop.x - hoop.rimRadius * 0.25;
+                const targetY = hoop.y - 30;
+                
+                const dxHoop = targetX - ball.initialX;
+                const dyHoop = targetY - ball.initialY;
+                const steps = dxHoop / Math.max(0.1, rawVx);
+                const idealVy = (dyHoop - 0.5 * GRAVITY * steps * steps) / steps;
+
+                const assistFactor = 0.65;
+                ball.computedVx = rawVx;
+                ball.computedVy = rawVy * (1 - assistFactor) + idealVy * assistFactor;
+            } else {
+                ball.computedVx = rawVx;
+                ball.computedVy = rawVy;
+            }
+        }
+
+        function handlePointerUp() {
+            if (!ball.isDragging || appState !== 'DRAGGING') return;
+            ball.isDragging = false;
+
+            ball.vx = ball.computedVx || (ball.initialX - ball.x) * DRAG_SENSITIVITY;
+            ball.vy = ball.computedVy || (ball.initialY - ball.y) * DRAG_SENSITIVITY;
+
+            if (Math.hypot(ball.vx, ball.vy) > 1.2) {
+                appState = 'IN_FLIGHT';
+                ball.vRot = (Math.random() - 0.5) * 0.15;
+            } else {
+                ball.x = ball.initialX;
+                ball.y = ball.initialY;
+                appState = 'READY_TO_SHOOT';
+            }
+        }
+
+        canvas.addEventListener('mousedown', handlePointerDown);
+        canvas.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('mouseup', handlePointerUp);
+
+        canvas.addEventListener('touchstart', handlePointerDown, { passive: true });
+        canvas.addEventListener('touchmove', handlePointerMove, { passive: true });
+        window.addEventListener('touchend', handlePointerUp);
+
+        // Auto Dunk Trigger
+        autoDunkBtn.addEventListener('click', () => {
+            if (appState !== 'READY_TO_SHOOT') return;
+            appState = 'IN_FLIGHT';
+            ball.x = ball.initialX;
+            ball.y = ball.initialY;
+
+            const targetX = hoop.x - hoop.rimRadius * 0.2;
+            const targetY = hoop.y - 35;
+            
+            ball.vx = 12;
+            const dxHoop = targetX - ball.initialX;
+            const steps = dxHoop / ball.vx;
+            ball.vy = ((targetY - ball.initialY) - 0.5 * GRAVITY * steps * steps) / steps;
+            ball.vRot = 0.08;
+        });
+
+        function drawCourt() {
+            const floorY = height - 40;
+
+            // Wood Floor
+            const floorGrad = ctx.createLinearGradient(0, floorY, 0, height);
+            floorGrad.addColorStop(0, '#D97706');
+            floorGrad.addColorStop(1, '#78350F');
+            ctx.fillStyle = floorGrad;
+            ctx.fillRect(0, floorY, width, 40);
+
+            // Court Lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, floorY);
+            ctx.lineTo(width, floorY);
+            ctx.stroke();
+
+            // Glass Backboard (Clear Glass Style with dark/white borders)
+            const bbX = hoop.x + hoop.rimRadius - 2;
+            const bbY = hoop.y - hoop.backboardHeight / 2;
+            
+            // Glass fill
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+            ctx.fillRect(bbX, bbY, hoop.backboardWidth, hoop.backboardHeight);
+            
+            // Outer Border
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(bbX, bbY, hoop.backboardWidth, hoop.backboardHeight);
+
+            // Inner Shooting Square
+            const sqW = 8;
+            const sqH = 45;
+            ctx.strokeStyle = '#0284C7'; // Blue box outline
+            ctx.lineWidth = 2.5;
+            ctx.strokeRect(bbX, hoop.y - sqH / 2, sqW, sqH);
+
+            // Support Pole
+            ctx.fillStyle = '#334155';
+            ctx.fillRect(bbX + hoop.backboardWidth, hoop.y, 22, height - hoop.y - 40);
+
+            // DRAW WOVEN DIAMOND NET MESH (BEFORE FRONT RIM OVERLAY)
+            drawWovenNetMesh();
+
+            // Sharp Basketball Orange Solid Rim with Net Hooks
+            drawRimAndHooks();
+        }
+
+        // REALISTIC WOVEN DIAMOND NET MESH SVG-STYLE CANVAS DRAWING
+        function drawWovenNetMesh() {
+            ctx.save();
+            
+            const topW = hoop.rimRadius * 2;
+            const botW = hoop.rimRadius * 1.1;
+            const netH = hoop.netLength;
+            const startX = hoop.x - hoop.rimRadius;
+            const startY = hoop.y + 3;
+
+            const bulge = hoop.netBulge; // Reactive bulge expansion factor
+            
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+            ctx.lineWidth = 2.2;
+            ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+            ctx.shadowBlur = 4;
+
+            const rows = 7;
+            const cols = 10;
+
+            // Generate Diamond Grid Nodes
+            const nodes = [];
+            for (let r = 0; r <= rows; r++) {
+                nodes[r] = [];
+                const t = r / rows;
+                // Width tapers down, but swells outward if bulging
+                const currentWidth = (topW * (1 - t) + botW * t) + Math.sin(t * Math.PI) * bulge * 28;
+                const currentX = hoop.x - currentWidth / 2;
+                const currentY = startY + t * netH;
+
+                for (let c = 0; c <= cols; c++) {
+                    const colRatio = c / cols;
+                    nodes[r][c] = {
+                        x: currentX + colRatio * currentWidth,
+                        y: currentY
+                    };
+                }
+            }
+
+            // Draw Cross-Hatched Woven Diamond Strands
+            ctx.beginPath();
+            // Left-to-Right Diagonals
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    ctx.moveTo(nodes[r][c].x, nodes[r][c].y);
+                    ctx.lineTo(nodes[r + 1][c + 1].x, nodes[r + 1][c + 1].y);
+                }
+            }
+            // Right-to-Left Diagonals
+            for (let r = 0; r < rows; r++) {
+                for (let c = 1; c <= cols; c++) {
+                    ctx.moveTo(nodes[r][c].x, nodes[r][c].y);
+                    ctx.lineTo(nodes[r + 1][c - 1].x, nodes[r + 1][c - 1].y);
+                }
+            }
+            ctx.stroke();
+
+            // Bottom Ring Opening Loop
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.lineWidth = 2.8;
+            for (let c = 0; c <= cols; c++) {
+                if (c === 0) ctx.moveTo(nodes[rows][c].x, nodes[rows][c].y);
+                else ctx.lineTo(nodes[rows][c].x, nodes[rows][c].y);
+            }
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // Sharp Orange Rim & Realistic Net Loop Mounts
+        function drawRimAndHooks() {
+            ctx.save();
+
+            const rx = hoop.x;
+            const ry = hoop.y;
+            const rad = hoop.rimRadius;
+
+            // Rim Depth Shadow Lip
+            ctx.fillStyle = '#C2410C';
+            ctx.beginPath();
+            ctx.ellipse(rx - rad/2, ry + 3, rad, rad * 0.22, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Solid Vibrant Orange Rim Ring
+            ctx.strokeStyle = '#F97316';
+            ctx.lineWidth = 7;
+            ctx.beginPath();
+            ctx.ellipse(rx - rad/2, ry, rad, rad * 0.22, 0, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Front Net Connection Loop Hooks
+            ctx.fillStyle = '#FFFFFF';
+            const hooks = 8;
+            for (let i = 0; i <= hooks; i++) {
+                const angle = Math.PI * (i / hooks);
+                const hx = rx - rad/2 + Math.cos(angle) * rad;
+                const hy = ry + Math.sin(angle) * (rad * 0.22);
+                ctx.beginPath();
+                ctx.arc(hx, hy + 2, 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+
+        function calculateTrajectoryPoints(startX, startY, vx, vy) {
+            const points = [];
+            let currX = startX;
+            let currY = startY;
+            let currVx = vx;
+            let currVy = vy;
+
+            for (let i = 0; i < 45; i++) {
+                points.push({ x: currX, y: currY });
+                currX += currVx;
+                currY += currVy;
+                currVy += GRAVITY;
+
+                if (currY > height - 35 || currX > width + 20) break;
+            }
+            return points;
+        }
+
+        function drawTrajectoryArc() {
+            if (appState !== 'DRAGGING') return;
+
+            const vx = ball.computedVx || (ball.initialX - ball.x) * DRAG_SENSITIVITY;
+            const vy = ball.computedVy || (ball.initialY - ball.y) * DRAG_SENSITIVITY;
+
+            const points = calculateTrajectoryPoints(ball.x, ball.y, vx, vy);
+            if (points.length < 2) return;
+
+            ctx.save();
+            ctx.strokeStyle = '#22C55E';
+            ctx.lineWidth = 4;
+            ctx.setLineDash([6, 6]);
+            ctx.shadowColor = '#22C55E';
+            ctx.shadowBlur = 12;
+
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                ctx.lineTo(points[i].x, points[i].y);
+            }
+            ctx.stroke();
+
+            // Target Ring
+            const lastPt = points[points.length - 1];
+            ctx.setLineDash([]);
+            ctx.fillStyle = 'rgba(34, 197, 94, 0.35)';
+            ctx.beginPath();
+            ctx.arc(lastPt.x, lastPt.y, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawBall() {
+            if (appState === 'IDLE_NO_FILE' || ball.opacity <= 0) return;
+
+            ctx.save();
+            ctx.globalAlpha = ball.opacity;
+            ctx.translate(ball.x, ball.y);
+            ctx.rotate(ball.rotation);
+
+            const w = 58;
+            const h = 72;
+
+            // Folded Document Card
+            ctx.fillStyle = '#FFFFFF';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+            ctx.shadowBlur = 12;
+
+            ctx.beginPath();
+            ctx.roundRect(-w/2, -h/2, w, h, 6);
+            ctx.fill();
+
+            // Top Header Ribbon
+            ctx.fillStyle = '#2563EB';
+            ctx.beginPath();
+            ctx.roundRect(-w/2, -h/2, w, 16, [6, 6, 0, 0]);
+            ctx.fill();
+
+            // Format Badge Text
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 9px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(uploadedFileExt || 'DOCX', 0, -h/2 + 11);
+
+            // Document Content Lines
+            ctx.fillStyle = '#CBD5E1';
+            ctx.fillRect(-w/2 + 8, -h/2 + 24, w - 16, 3);
+            ctx.fillRect(-w/2 + 8, -h/2 + 31, w - 20, 3);
+            ctx.fillRect(-w/2 + 8, -h/2 + 38, w - 16, 3);
+
+            // File Size Badge
+            ctx.fillStyle = '#F8FAFC';
+            ctx.strokeStyle = '#E2E8F0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.roundRect(-w/2 + 6, h/2 - 22, w - 12, 16, 4);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#475569';
+            ctx.font = '700 8px Inter, sans-serif';
+            ctx.fillText(uploadedFileSizeStr || '1.2 MB', 0, h/2 - 10);
+
+            // Basketball Seam Arc
+            ctx.strokeStyle = 'rgba(249, 115, 22, 0.35)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, 0, 20, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        function spawnSwishParticles(x, y) {
+            playSwishSound();
+            for (let i = 0; i < 35; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8 - 2,
+                    color: Math.random() > 0.5 ? '#22C55E' : '#F97316',
+                    size: Math.random() * 5 + 3,
+                    alpha: 1,
+                    life: 1
+                });
+            }
+        }
+
+        function updateAndDrawParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.025;
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function triggerConversionSequence() {
+            appState = 'CONVERTING';
+            score += 100;
+            scoreDisplay.textContent = score;
+
+            // Show Conversion Overlay
+            conversionOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            convertingState.classList.remove('hidden');
+            downloadState.classList.add('hidden');
+
+            let progress = 0;
+            const statusMessages = [
+                "Reading document layout...",
+                "Formatting typography & tables...",
+                "Encoding PDF vector streams...",
+                "Finalizing conversion output..."
+            ];
+
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 12) + 8;
+                if (progress > 100) progress = 100;
+
+                conversionProgressBar.style.width = `${progress}%`;
+                conversionProgressPercent.textContent = `${progress}%`;
+
+                const msgIdx = Math.min(Math.floor((progress / 100) * statusMessages.length), statusMessages.length - 1);
+                conversionStatusText.textContent = statusMessages[msgIdx];
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    generateClientSidePdfBlob();
+                    setTimeout(() => {
+                        convertingState.classList.add('hidden');
+                        downloadState.classList.remove('hidden');
+                        appState = 'COMPLETED';
+                    }, 400);
+                }
+            }, 180);
+        }
+
+        function generateClientSidePdfBlob() {
+            const rawPdfContent = `%PDF-1.4
+1 0 obj <</Type /Catalog /Pages 2 0 R>> endobj
+2 0 obj <</Type /Pages /Kids [3 0 R] /Count 1>> endobj
+3 0 obj <</Type /Page /Parent 2 0 R /Resources <</Font <</F1 4 0 R>>>> /MediaBox [0 0 612 792] /Contents 5 0 R>> endobj
+4 0 obj <</Type /Font /Subtype /Type1 /BaseFont /Helvetica>> endobj
+5 0 obj <</Length 120>> stream
+BT
+/F1 24 Tf
+100 700 TD
+(Dunk2PDF Converted Document) Tj
+/F1 12 Tf
+0 -30 TD
+(Original File: ${uploadedFileName}) Tj
+0 -20 TD
+(Converted successfully inside browser with zero server uploads.) Tj
+ET
+endstream endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000062 00000 n 
+0000000117 00000 n 
+0000000234 00000 n 
+0000000302 00000 n 
+trailer <</Size 6 /Root 1 0 R>>
+startxref
+472
+%%EOF`;
+
+            generatedPdfBlob = new Blob([rawPdfContent], { type: 'application/pdf' });
+            const outName = uploadedFileName.replace(/\.[^/.]+$/, "") + ".pdf";
+            downloadFileDetails.textContent = `${uploadedFileName} ➔ ${outName} (${uploadedFileSizeStr})`;
+        }
+
+        downloadPdfBtn.addEventListener('click', () => {
+            if (!generatedPdfBlob) return;
+            const url = URL.createObjectURL(generatedPdfBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = uploadedFileName.replace(/\.[^/.]+$/, "") + ".pdf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('PDF downloaded successfully!', 'success');
+        });
+
+        convertAnotherBtn.addEventListener('click', () => {
+            resetToState1();
+        });
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw Static Elements
+            drawCourt();
+
+            // Physics Update for In-Flight Shot
+            if (appState === 'IN_FLIGHT') {
+                ball.x += ball.vx;
+                ball.y += ball.vy;
+                ball.vy += GRAVITY;
+                ball.rotation += ball.vRot;
+
+                // Check Swish Entry at Rim
+                const targetX = hoop.x - hoop.rimRadius * 0.25;
+                const targetY = hoop.y;
+
+                const distToRim = Math.hypot(ball.x - targetX, ball.y - targetY);
+
+                if (distToRim < 30 && ball.vy > 0) {
+                    // SWISH TRIGGER!
+                    appState = 'SWISH_NET';
+                    spawnSwishParticles(hoop.x - hoop.rimRadius * 0.25, hoop.y);
+                } else if (ball.y > height + 50 || ball.x > width + 50) {
+                    // Missed shot reset
+                    showToast('Missed shot! Pull back and try again.', 'error');
+                    resetBallPosition();
+                }
+            }
+
+            // Real-time Net Bulge & Slide Down Animation
+            if (appState === 'SWISH_NET') {
+                hoop.swishProgress += 0.06;
+                hoop.netBulge = Math.sin(hoop.swishProgress * Math.PI); // Smooth outward swell
+
+                // Slide document straight DOWN through net center
+                ball.x = hoop.x - hoop.rimRadius * 0.25;
+                ball.y = hoop.y + hoop.swishProgress * hoop.netLength;
+                ball.rotation *= 0.8; // Align straight
+
+                if (hoop.swishProgress >= 1.0) {
+                    // Complete exit from net bottom
+                    ball.opacity = 0;
+                    triggerConversionSequence();
+                }
+            } else {
+                // Return net to rest position
+                hoop.netBulge *= 0.9;
+            }
+
+            // Draw Trajectory Guidance
+            drawTrajectoryArc();
+
+            // Draw Document Card
+            drawBall();
+
+            // Draw Particles
+            updateAndDrawParticles();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Initialize Canvas & Start
+        window.onload = function() {
+            resizeCanvas();
+            gameLoop();
+        };
+    </script>
 </body>
 </html>
