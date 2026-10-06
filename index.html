@@ -104,68 +104,84 @@
     <!-- Toast Container -->
     <div id="toastContainer" class="fixed top-20 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
-    <header class="relative py-12 px-4 text-center max-w-4xl mx-auto">
+    <header class="relative py-8 sm:py-12 px-4 text-center max-w-4xl mx-auto">
         <span class="inline-flex items-center gap-2 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 rounded-full mb-4">
-            <i class="fa-solid fa-bolt text-emerald-400"></i> Ultra-Realistic Hoop Mechanics & Net Swish
+            <i class="fa-solid fa-bolt text-emerald-400"></i> Touch-Optimized Mobile Dunking Engine
         </span>
-        <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
+        <h1 class="text-3xl sm:text-6xl font-black text-white tracking-tight leading-tight">
             Don't Just Convert Docs. <br>
             <span class="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-500 text-glow">Dunk 'Em Into PDFs!</span>
         </h1>
-        <p class="mt-4 text-slate-300 max-w-2xl mx-auto text-base sm:text-lg">
-            Upload your Word documents (<span class="text-orange-400 font-semibold">.doc / .docx</span>), pull back to aim with our high-precision neon arc, and swish through the net to convert instantly!
+        <p class="mt-3 sm:mt-4 text-slate-300 max-w-2xl mx-auto text-sm sm:text-lg">
+            Upload your Word documents (<span class="text-orange-400 font-semibold">.doc / .docx</span>), swipe/pull back anywhere on mobile, and effortlessly swish through the net!
         </p>
     </header>
 
-    <section id="game-section" class="max-w-5xl mx-auto px-4 w-full mb-16">
+    <section id="game-section" class="max-w-5xl mx-auto px-2 sm:px-4 w-full mb-16">
         <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl">
             
             <!-- Game Header Bar -->
-            <div id="gameHeaderBar" class="hidden p-4 sm:p-5 border-b border-slate-700/50 flex flex-wrap items-center justify-between gap-4 bg-slate-900/60">
-                <div class="flex items-center gap-6">
+            <div id="gameHeaderBar" class="hidden p-3 sm:p-5 border-b border-slate-700/50 flex flex-wrap items-center justify-between gap-3 bg-slate-900/60">
+                <div class="flex items-center gap-4 sm:gap-6">
                     <div>
-                        <span class="text-xs text-slate-400 uppercase font-semibold tracking-wider block">Uploaded File</span>
-                        <div id="fileNameDisplay" class="text-sm font-bold text-orange-400 truncate max-w-[180px] sm:max-w-xs flex items-center gap-2">
+                        <span class="text-[10px] sm:text-xs text-slate-400 uppercase font-semibold tracking-wider block">Uploaded File</span>
+                        <div id="fileNameDisplay" class="text-xs sm:text-sm font-bold text-orange-400 truncate max-w-[140px] sm:max-w-xs flex items-center gap-2">
                             <i class="fa-solid fa-file-word text-blue-400"></i>
                             <span id="fileNameText">document.docx</span>
                         </div>
                     </div>
-                    <div class="h-8 w-px bg-slate-700 hidden sm:block"></div>
+                    <div class="h-8 w-px bg-slate-700"></div>
                     <div>
-                        <span class="text-xs text-slate-400 uppercase font-semibold tracking-wider block">Score</span>
-                        <div id="scoreDisplay" class="text-xl font-extrabold text-emerald-400">0</div>
+                        <span class="text-[10px] sm:text-xs text-slate-400 uppercase font-semibold tracking-wider block">Score</span>
+                        <div id="scoreDisplay" class="text-lg sm:text-xl font-extrabold text-emerald-400">0</div>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-2 sm:gap-3">
-                    <button id="autoDunkBtn" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-4 py-2 rounded-lg text-sm shadow-md transition-all flex items-center gap-2">
-                        <span>Auto Dunk</span> 🏀
+                <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
+                    <button id="autoDunkBtn" class="flex-1 sm:flex-none bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-1.5 active:scale-95">
+                        <i class="fa-solid fa-basketball text-yellow-300 animate-bounce"></i>
+                        <span>ONE-TAP DUNK 🏀</span>
                     </button>
-                    <label class="cursor-pointer bg-slate-700 hover:bg-slate-600 text-slate-200 px-3.5 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 border border-slate-600">
-                        <i class="fa-solid fa-arrow-up-from-bracket text-orange-400"></i> <span class="hidden sm:inline">Change File</span>
+                    <label class="cursor-pointer bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5 border border-slate-600">
+                        <i class="fa-solid fa-arrow-up-from-bracket text-orange-400"></i>
+                        <span class="hidden sm:inline">Change File</span>
                         <input type="file" id="changeFileInput" class="hidden" accept=".doc,.docx">
                     </label>
-                    <button id="resetGameBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2.5 rounded-lg border border-slate-700 transition-all" title="Reset Shot">
+                    <button id="resetGameBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 sm:p-2.5 rounded-lg border border-slate-700 transition-all" title="Reset Shot">
                         <i class="fa-solid fa-rotate-left"></i>
                     </button>
                 </div>
             </div>
 
             <!-- Court Canvas Container -->
-            <div class="relative w-full aspect-[16/9] min-h-[380px] max-h-[520px] bg-slate-950 overflow-hidden flex items-center justify-center">
+            <div class="relative w-full aspect-[4/3] sm:aspect-[16/9] min-h-[360px] max-h-[520px] bg-slate-950 overflow-hidden flex items-center justify-center">
                 
-                <canvas id="gameCanvas" class="w-full h-full block"></canvas>
+                <canvas id="gameCanvas" class="w-full h-full block touch-none"></canvas>
+
+                <!-- TARGET LOCKED UI BADGE OVERLAY -->
+                <div id="targetLockedBadge" class="absolute top-4 left-1/2 -translate-x-1/2 bg-emerald-500/90 text-slate-950 px-4 py-1.5 rounded-full font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-emerald-500/30 transition-all opacity-0 pointer-events-none scale-90 z-10">
+                    <i class="fa-solid fa-crosshairs text-slate-950 text-sm"></i>
+                    <span>TARGET LOCKED 🎯</span>
+                </div>
+
+                <!-- MOBILE SHOT HELPER BAND -->
+                <div id="mobileHelperBand" class="hidden absolute bottom-3 left-3 right-3 bg-slate-900/80 backdrop-blur-md border border-slate-700/60 text-slate-200 text-xs py-2 px-3 rounded-xl flex items-center justify-between gap-2 z-10">
+                    <span class="font-medium text-slate-300"><i class="fa-solid fa-hand-pointer text-orange-400 mr-1"></i> Swipe/pull screen to aim</span>
+                    <button id="mobileOneTapBtn" class="bg-gradient-to-r from-orange-500 to-amber-500 text-white font-extrabold px-3 py-1 rounded-lg text-xs shadow-md active:scale-95">
+                        SWISH! 🏀
+                    </button>
+                </div>
 
                 <!-- STATE 1: INITIAL UPLOAD DROPZONE OVERLAY -->
-                <div id="dropzoneOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center transition-all duration-300 z-20">
-                    <div id="dropTarget" class="w-full max-w-md border-2 border-dashed border-orange-500/50 hover:border-orange-400 bg-slate-900/60 hover:bg-slate-900/90 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all group shadow-xl">
-                        <div class="w-20 h-20 rounded-2xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center mb-4 text-orange-400 text-4xl group-hover:scale-110 transition-transform">
+                <div id="dropzoneOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 text-center transition-all duration-300 z-20">
+                    <div id="dropTarget" class="w-full max-w-md border-2 border-dashed border-orange-500/50 hover:border-orange-400 bg-slate-900/60 hover:bg-slate-900/90 rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center cursor-pointer transition-all group shadow-xl">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center mb-4 text-orange-400 text-3xl sm:text-4xl group-hover:scale-110 transition-transform">
                             <i class="fa-solid fa-file-word"></i>
                         </div>
-                        <h3 class="text-xl font-extrabold text-white mb-1">Select or Drop Your Word Document</h3>
+                        <h3 class="text-lg sm:text-xl font-extrabold text-white mb-1">Select or Drop Your Word Document</h3>
                         <p class="text-xs text-slate-400 mb-6 max-w-xs">Supports <strong class="text-slate-200">.DOC</strong> or <strong class="text-slate-200">.DOCX</strong> files up to <strong class="text-slate-200">25MB</strong>.</p>
                         
-                        <button id="uploadTriggerBtn" class="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/25 transition-all flex items-center gap-2 pointer-events-none">
+                        <button id="uploadTriggerBtn" class="px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/25 transition-all flex items-center gap-2 pointer-events-none text-sm">
                             <i class="fa-solid fa-folder-open"></i> Browse Files
                         </button>
                         <input type="file" id="mainFileInput" class="hidden" accept=".doc,.docx">
@@ -215,13 +231,12 @@
             <!-- Helper Instruction Footer -->
             <div class="p-3 bg-slate-900/80 text-center text-xs text-slate-400 border-t border-slate-800 flex items-center justify-center gap-2">
                 <i class="fa-solid fa-circle-info text-emerald-400"></i>
-                <span>Pull document backwards to aim, or tap <strong class="text-emerald-400">Auto Dunk 🏀</strong> for a guaranteed score!</span>
+                <span>Swipe/pull back to aim, or tap <strong class="text-emerald-400">ONE-TAP DUNK 🏀</strong> for a guaranteed score!</span>
             </div>
 
         </div>
     </section>
 
-    <!-- How It Works Section -->
     <section id="how-it-works" class="py-16 bg-slate-900/50 border-y border-slate-800">
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-12">
@@ -239,7 +254,7 @@
                 <div class="bg-slate-800/40 p-6 rounded-2xl border border-slate-700/50">
                     <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 font-black rounded-xl flex items-center justify-center text-xl mb-4 border border-emerald-500/20">2</div>
                     <h3 class="text-lg font-bold text-white mb-2">Aim & Swish</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">Drag back to align the neon green trajectory parabola directly with the rim. Release to shoot or click Auto Dunk for instant precision.</p>
+                    <p class="text-xs text-slate-400 leading-relaxed">Drag back on desktop or swipe anywhere on touchscreens to align the neon arc. Or click ONE-TAP DUNK for instant precision.</p>
                 </div>
 
                 <div class="bg-slate-800/40 p-6 rounded-2xl border border-slate-700/50">
@@ -251,7 +266,6 @@
         </div>
     </section>
 
-    <!-- Features Section -->
     <section id="features" class="py-16 max-w-6xl mx-auto px-4">
         <div class="text-center mb-12">
             <h2 class="text-3xl font-extrabold text-white">Engineered for Accuracy & Fun</h2>
@@ -268,7 +282,7 @@
             <div class="p-6 bg-slate-800/30 rounded-2xl border border-slate-700/40">
                 <i class="fa-solid fa-basketball text-2xl text-orange-400 mb-3"></i>
                 <h4 class="font-bold text-white mb-1">Realistic Woven Net Bulge</h4>
-                <p class="text-xs text-slate-400 leading-relaxed">Dynamic SVG diamond mesh deforms outward and downwards realisticly when the document slides through.</p>
+                <p class="text-xs text-slate-400 leading-relaxed">Dynamic SVG diamond mesh deforms outward and downwards realistically when the document slides through.</p>
             </div>
 
             <div class="p-6 bg-slate-800/30 rounded-2xl border border-slate-700/40">
@@ -279,7 +293,6 @@
         </div>
     </section>
 
-    <!-- Privacy Section -->
     <section id="privacy" class="py-12 bg-slate-900/40 border-t border-slate-800">
         <div class="max-w-4xl mx-auto px-4 text-center">
             <div class="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto mb-4 text-xl border border-emerald-500/20">
@@ -292,7 +305,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="py-8 bg-slate-950 border-t border-slate-800 text-center text-xs text-slate-500">
         <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
@@ -319,6 +331,9 @@
         const fileNameText = document.getElementById('fileNameText');
         const scoreDisplay = document.getElementById('scoreDisplay');
         const autoDunkBtn = document.getElementById('autoDunkBtn');
+        const mobileOneTapBtn = document.getElementById('mobileOneTapBtn');
+        const mobileHelperBand = document.getElementById('mobileHelperBand');
+        const targetLockedBadge = document.getElementById('targetLockedBadge');
         const resetGameBtn = document.getElementById('resetGameBtn');
         const toastContainer = document.getElementById('toastContainer');
 
@@ -340,6 +355,7 @@
         let uploadedFileName = "";
         let uploadedFileSizeStr = "";
         let uploadedFileExt = "";
+        let isTargetLocked = false;
 
         // Canvas size
         let width = 800;
@@ -376,12 +392,14 @@
 
         // Physics Constants
         const GRAVITY = 0.42;
-        const DRAG_SENSITIVITY = 0.16;
-        const MAX_PULL = 180;
+        const DRAG_SENSITIVITY = 0.18;
+        const MAX_PULL = 220;
 
         let particles = [];
         let generatedPdfBlob = null;
         let audioCtx = null;
+
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
         function playSwishSound() {
             try {
@@ -478,9 +496,13 @@
             gameHeaderBar.classList.remove('hidden');
             fileNameText.textContent = uploadedFileName;
 
+            if (isTouchDevice) {
+                mobileHelperBand.classList.remove('hidden');
+            }
+
             appState = 'READY_TO_SHOOT';
             resetBallPosition();
-            showToast(`Loaded "${uploadedFileName}". Aim and dunk!`, 'success');
+            showToast(`Loaded "${uploadedFileName}". Swipe or tap to dunk!`, 'success');
         }
 
         function resetToState1() {
@@ -493,6 +515,7 @@
             changeFileInput.value = "";
 
             gameHeaderBar.classList.add('hidden');
+            mobileHelperBand.classList.add('hidden');
             conversionOverlay.classList.add('opacity-0', 'pointer-events-none');
             convertingState.classList.remove('hidden');
             downloadState.classList.add('hidden');
@@ -513,7 +536,20 @@
             ball.opacity = 1;
             hoop.netBulge = 0;
             hoop.swishProgress = 0;
+            hideTargetLocked();
             if (appState !== 'IDLE_NO_FILE') appState = 'READY_TO_SHOOT';
+        }
+
+        function showTargetLocked() {
+            isTargetLocked = true;
+            targetLockedBadge.classList.remove('opacity-0', 'pointer-events-none', 'scale-90');
+            targetLockedBadge.classList.add('scale-100');
+        }
+
+        function hideTargetLocked() {
+            isTargetLocked = false;
+            targetLockedBadge.classList.add('opacity-0', 'pointer-events-none', 'scale-90');
+            targetLockedBadge.classList.remove('scale-100');
         }
 
         // Dropzone listeners
@@ -553,16 +589,20 @@
             width = canvas.width;
             height = canvas.height;
 
-            ball.initialX = Math.max(100, width * 0.18);
-            ball.initialY = height * 0.65;
+            const isSmallMobile = width < 500;
+            
+            // Scaled court placement
+            ball.initialX = Math.max(70, width * (isSmallMobile ? 0.22 : 0.18));
+            ball.initialY = height * (isSmallMobile ? 0.72 : 0.65);
             
             if (appState === 'READY_TO_SHOOT' || appState === 'DRAGGING' || appState === 'IDLE_NO_FILE') {
                 ball.x = ball.initialX;
                 ball.y = ball.initialY;
             }
 
-            hoop.x = width - Math.max(120, width * 0.22);
-            hoop.y = height * 0.36;
+            hoop.x = width - Math.max(75, width * (isSmallMobile ? 0.22 : 0.20));
+            hoop.y = height * (isSmallMobile ? 0.32 : 0.35);
+            hoop.rimRadius = isSmallMobile ? 38 : 46;
         }
 
         window.addEventListener('resize', resizeCanvas);
@@ -580,8 +620,12 @@
         function handlePointerDown(e) {
             if (appState !== 'READY_TO_SHOOT') return;
             const pos = getPointerPos(e);
+            
+            // On touch devices, allow dragging anywhere on screen for ultra-easy mobile launching!
+            const hitMargin = isTouchDevice ? 1000 : ball.radius * 2.5;
             const dist = Math.hypot(pos.x - ball.x, pos.y - ball.y);
-            if (dist < ball.radius * 2.5) {
+            
+            if (dist < hitMargin || isTouchDevice) {
                 ball.isDragging = true;
                 ball.dragStartX = pos.x;
                 ball.dragStartY = pos.y;
@@ -606,22 +650,27 @@
             let rawVx = (ball.initialX - ball.x) * DRAG_SENSITIVITY;
             let rawVy = (ball.initialY - ball.y) * DRAG_SENSITIVITY;
 
-            // FORGIVING AUTO-AIM ASSIST
-            if (rawVx > 1.8 && rawVy < 0) {
-                const targetX = hoop.x - hoop.rimRadius * 0.5;
-                const targetY = hoop.y - 30;
-                
-                const dxHoop = targetX - ball.initialX;
-                const dyHoop = targetY - ball.initialY;
-                const steps = dxHoop / Math.max(0.1, rawVx);
+            // ULTRA-FORGIVING MOBILE AUTO-AIM MAGNET ASSIST
+            const targetX = hoop.x - hoop.rimRadius * 0.4;
+            const targetY = hoop.y - 25;
+            const dxHoop = targetX - ball.initialX;
+            const dyHoop = targetY - ball.initialY;
+
+            // Calculate auto-aim trajectory
+            if (rawVx > 1.2 || isTouchDevice) {
+                const effVx = Math.max(rawVx, 8.5);
+                const steps = dxHoop / effVx;
                 const idealVy = (dyHoop - 0.5 * GRAVITY * steps * steps) / steps;
 
-                const assistFactor = 0.68;
-                ball.computedVx = rawVx;
+                // Stronger magnetic assist on touchscreens (85%)
+                const assistFactor = isTouchDevice ? 0.88 : 0.70;
+                ball.computedVx = effVx;
                 ball.computedVy = rawVy * (1 - assistFactor) + idealVy * assistFactor;
+                showTargetLocked();
             } else {
                 ball.computedVx = rawVx;
                 ball.computedVy = rawVy;
+                hideTargetLocked();
             }
         }
 
@@ -632,7 +681,7 @@
             ball.vx = ball.computedVx || (ball.initialX - ball.x) * DRAG_SENSITIVITY;
             ball.vy = ball.computedVy || (ball.initialY - ball.y) * DRAG_SENSITIVITY;
 
-            if (Math.hypot(ball.vx, ball.vy) > 1.2) {
+            if (Math.hypot(ball.vx, ball.vy) > 0.8 || isTouchDevice) {
                 appState = 'IN_FLIGHT';
                 ball.vRot = (Math.random() - 0.5) * 0.15;
             } else {
@@ -650,31 +699,35 @@
         canvas.addEventListener('touchmove', handlePointerMove, { passive: true });
         window.addEventListener('touchend', handlePointerUp);
 
-        autoDunkBtn.addEventListener('click', () => {
+        function executeAutoDunk() {
             if (appState !== 'READY_TO_SHOOT') return;
             appState = 'IN_FLIGHT';
             ball.x = ball.initialX;
             ball.y = ball.initialY;
 
-            const targetX = hoop.x - hoop.rimRadius * 0.5;
-            const targetY = hoop.y - 35;
+            const targetX = hoop.x - hoop.rimRadius * 0.4;
+            const targetY = hoop.y - 30;
             
-            ball.vx = 11.5;
+            ball.vx = 11.0;
             const dxHoop = targetX - ball.initialX;
             const steps = dxHoop / ball.vx;
             ball.vy = ((targetY - ball.initialY) - 0.5 * GRAVITY * steps * steps) / steps;
             ball.vRot = 0.08;
-        });
+            showTargetLocked();
+        }
+
+        autoDunkBtn.addEventListener('click', executeAutoDunk);
+        mobileOneTapBtn.addEventListener('click', executeAutoDunk);
 
         function drawCourt() {
-            const floorY = height - 40;
+            const floorY = height - 36;
 
             // Wood Floor
             const floorGrad = ctx.createLinearGradient(0, floorY, 0, height);
             floorGrad.addColorStop(0, '#D97706');
             floorGrad.addColorStop(1, '#78350F');
             ctx.fillStyle = floorGrad;
-            ctx.fillRect(0, floorY, width, 40);
+            ctx.fillRect(0, floorY, width, 36);
 
             // Court Lines
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
@@ -685,20 +738,20 @@
             ctx.stroke();
 
             // Heavy Steel Support Pole
-            const bbX = hoop.x + hoop.rimRadius + 8;
+            const bbX = hoop.x + hoop.rimRadius + 6;
             const bbY = hoop.y - hoop.backboardHeight / 2;
 
             ctx.fillStyle = '#1E293B';
-            ctx.fillRect(bbX + hoop.backboardWidth + 4, hoop.y - 10, 28, height - hoop.y + 10);
+            ctx.fillRect(bbX + hoop.backboardWidth + 4, hoop.y - 10, 24, height - hoop.y + 10);
             
             // Angled Bracket Mounts
             ctx.strokeStyle = '#475569';
-            ctx.lineWidth = 6;
+            ctx.lineWidth = 5;
             ctx.beginPath();
-            ctx.moveTo(bbX + hoop.backboardWidth, hoop.y - 45);
-            ctx.lineTo(bbX + hoop.backboardWidth + 24, hoop.y - 10);
-            ctx.moveTo(bbX + hoop.backboardWidth, hoop.y + 45);
-            ctx.lineTo(bbX + hoop.backboardWidth + 24, hoop.y - 10);
+            ctx.moveTo(bbX + hoop.backboardWidth, hoop.y - 40);
+            ctx.lineTo(bbX + hoop.backboardWidth + 20, hoop.y - 10);
+            ctx.moveTo(bbX + hoop.backboardWidth, hoop.y + 40);
+            ctx.lineTo(bbX + hoop.backboardWidth + 20, hoop.y - 10);
             ctx.stroke();
 
             // Glass Backboard
@@ -707,14 +760,14 @@
             
             // Outer White Border
             ctx.strokeStyle = '#FFFFFF';
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 3.5;
             ctx.strokeRect(bbX, bbY, hoop.backboardWidth, hoop.backboardHeight);
 
             // Inner Orange Targeting Square Outline
-            const sqH = 48;
+            const sqH = 44;
             ctx.strokeStyle = '#F97316';
-            ctx.lineWidth = 3.5;
-            ctx.strokeRect(bbX + 1, hoop.y - sqH / 2, 8, sqH);
+            ctx.lineWidth = 3;
+            ctx.strokeRect(bbX + 1, hoop.y - sqH / 2, 7, sqH);
 
             // DRAW WOVEN DIAMOND NET MESH
             drawWovenNetMesh();
@@ -726,11 +779,8 @@
         function drawWovenNetMesh() {
             ctx.save();
             
-            const rimLeftX = hoop.x - hoop.rimRadius;
-            const rimRightX = hoop.x + hoop.rimRadius;
             const startY = hoop.y + 4;
             const netH = hoop.netLength;
-
             const bulge = hoop.netBulge;
 
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
@@ -739,7 +789,7 @@
             ctx.shadowBlur = 4;
 
             const rows = 8;
-            const cols = 12;
+            const cols = 10;
 
             // Generate Mesh Grid Nodes with Dynamic Bulge Wave
             const nodes = [];
@@ -768,21 +818,19 @@
             ctx.beginPath();
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {
-                    // Left-to-Right Diagonals
                     ctx.moveTo(nodes[r][c].x, nodes[r][c].y);
                     ctx.lineTo(nodes[r + 1][c + 1].x, nodes[r + 1][c + 1].y);
                 }
             }
             for (let r = 0; r < rows; r++) {
                 for (let c = 1; c <= cols; c++) {
-                    // Right-to-Left Diagonals
                     ctx.moveTo(nodes[r][c].x, nodes[r][c].y);
                     ctx.lineTo(nodes[r + 1][c - 1].x, nodes[r + 1][c - 1].y);
                 }
             }
             ctx.stroke();
 
-            // Reinforced Bottom Loop Ring
+            // Bottom Ring
             ctx.beginPath();
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
             ctx.lineWidth = 3;
@@ -804,7 +852,7 @@
 
             // Rim Rear Bracket Connection
             ctx.fillStyle = '#EA580C';
-            ctx.fillRect(rx + rad - 4, ry - 6, 16, 12);
+            ctx.fillRect(rx + rad - 4, ry - 5, 14, 10);
 
             // Elliptical Rim Shadow Lip
             ctx.fillStyle = '#C2410C';
@@ -814,20 +862,20 @@
 
             // Solid Metal Orange Rim Ring
             ctx.strokeStyle = '#F97316';
-            ctx.lineWidth = 7;
+            ctx.lineWidth = 6.5;
             ctx.beginPath();
             ctx.ellipse(rx, ry, rad, rad * 0.22, 0, 0, Math.PI * 2);
             ctx.stroke();
 
             // Wire Net Loops
             ctx.fillStyle = '#FFFFFF';
-            const hooks = 10;
+            const hooks = 8;
             for (let i = 0; i <= hooks; i++) {
                 const angle = Math.PI * (i / hooks);
                 const hx = rx + Math.cos(angle) * rad;
                 const hy = ry + Math.sin(angle) * (rad * 0.22);
                 ctx.beginPath();
-                ctx.arc(hx, hy + 2, 2.2, 0, Math.PI * 2);
+                ctx.arc(hx, hy + 2, 2, 0, Math.PI * 2);
                 ctx.fill();
             }
 
@@ -863,10 +911,10 @@
 
             ctx.save();
             ctx.strokeStyle = '#22C55E';
-            ctx.lineWidth = 4.5;
-            ctx.setLineDash([7, 7]);
+            ctx.lineWidth = 5;
+            ctx.setLineDash([8, 6]);
             ctx.shadowColor = '#22C55E';
-            ctx.shadowBlur = 14;
+            ctx.shadowBlur = 16;
 
             ctx.beginPath();
             ctx.moveTo(points[0].x, points[0].y);
@@ -877,9 +925,9 @@
 
             const lastPt = points[points.length - 1];
             ctx.setLineDash([]);
-            ctx.fillStyle = 'rgba(34, 197, 94, 0.4)';
+            ctx.fillStyle = 'rgba(34, 197, 94, 0.5)';
             ctx.beginPath();
-            ctx.arc(lastPt.x, lastPt.y, 11, 0, Math.PI * 2);
+            ctx.arc(lastPt.x, lastPt.y, 12, 0, Math.PI * 2);
             ctx.fill();
 
             ctx.restore();
@@ -893,41 +941,42 @@
             ctx.translate(ball.x, ball.y);
             ctx.rotate(ball.rotation);
 
-            const w = 58;
-            const h = 72;
+            const isSmall = width < 500;
+            const w = isSmall ? 48 : 56;
+            const h = isSmall ? 60 : 70;
 
             ctx.fillStyle = '#FFFFFF';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
-            ctx.shadowBlur = 14;
+            ctx.shadowBlur = 12;
 
             ctx.beginPath();
             ctx.roundRect(-w/2, -h/2, w, h, 6);
             ctx.fill();
 
-            // Ribbon
+            // Ribbon header
             ctx.fillStyle = '#2563EB';
             ctx.beginPath();
-            ctx.roundRect(-w/2, -h/2, w, 16, [6, 6, 0, 0]);
+            ctx.roundRect(-w/2, -h/2, w, 15, [6, 6, 0, 0]);
             ctx.fill();
 
             // Extension badge
             ctx.fillStyle = '#FFFFFF';
             ctx.font = 'bold 9px Inter, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText(uploadedFileExt || 'DOCX', 0, -h/2 + 11);
+            ctx.fillText(uploadedFileExt || 'DOCX', 0, -h/2 + 10);
 
-            // Document mock text lines
+            // Document lines
             ctx.fillStyle = '#CBD5E1';
-            ctx.fillRect(-w/2 + 8, -h/2 + 24, w - 16, 3);
-            ctx.fillRect(-w/2 + 8, -h/2 + 31, w - 20, 3);
-            ctx.fillRect(-w/2 + 8, -h/2 + 38, w - 16, 3);
+            ctx.fillRect(-w/2 + 7, -h/2 + 22, w - 14, 2.5);
+            ctx.fillRect(-w/2 + 7, -h/2 + 28, w - 18, 2.5);
+            ctx.fillRect(-w/2 + 7, -h/2 + 34, w - 14, 2.5);
 
             // Size Tag
             ctx.fillStyle = '#F8FAFC';
             ctx.strokeStyle = '#E2E8F0';
             ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.roundRect(-w/2 + 6, h/2 - 22, w - 12, 16, 4);
+            ctx.roundRect(-w/2 + 5, h/2 - 20, w - 10, 14, 4);
             ctx.fill();
             ctx.stroke();
 
@@ -935,11 +984,11 @@
             ctx.font = '700 8px Inter, sans-serif';
             ctx.fillText(uploadedFileSizeStr || '1.2 MB', 0, h/2 - 10);
 
-            // Basketball Seams Overlay
+            // Basketball Seams
             ctx.strokeStyle = 'rgba(249, 115, 22, 0.35)';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.arc(0, 0, 20, 0, Math.PI * 2);
+            ctx.arc(0, 0, 18, 0, Math.PI * 2);
             ctx.stroke();
 
             ctx.restore();
@@ -1090,14 +1139,16 @@ startxref
                 const targetX = hoop.x;
                 const targetY = hoop.y;
 
+                // EXPANDED MAGNETIC HITBOX FOR SWISH EFFORTLESS SCORE ON MOBILE (65px)
+                const hitRadius = isTouchDevice ? 65 : 50;
                 const distToRim = Math.hypot(ball.x - targetX, ball.y - targetY);
 
-                if (distToRim < 38 && ball.vy > 0) {
+                if (distToRim < hitRadius && ball.vy > -1) {
                     // SWISH TRIGGER
                     appState = 'SWISH_NET';
                     spawnSwishParticles(hoop.x, hoop.y);
-                } else if (ball.y > height + 50 || ball.x > width + 50) {
-                    showToast('Missed shot! Pull back and try again.', 'error');
+                } else if (ball.y > height + 60 || ball.x > width + 60) {
+                    showToast('Missed shot! Try again or tap ONE-TAP DUNK.', 'error');
                     resetBallPosition();
                 }
             }
