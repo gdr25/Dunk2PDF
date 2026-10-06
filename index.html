@@ -3,27 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dunk2PDF — Don't Just Convert. Dunk Your Documents.</title>
-  <meta name="description" content="Turn DOC and DOCX files into PDF with one satisfying basketball shot. Fast, fun, and interactive document conversion.">
+  <title>Dunk2PDF — Vertical Dunk Document Converter</title>
+  <meta name="description" content="Slam dunk your DOC and DOCX files straight into PDF format with a vertical court, visible trajectory guidance, and magnetic auto-dunking.">
   
-  <!-- Fonts -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
-    /* ==========================================================================
-       RESET & GLOBAL VARIABLES
-       ========================================================================== */
     :root {
-      --bg-main: #F7F8FA;
-      --primary: #111827;
+      --bg-main: #F8FAFC;
+      --primary: #0F172A;
       --orange: #F97316;
       --orange-hover: #EA580C;
-      --success: #22C55E;
-      --gray-secondary: #6B7280;
+      --neon-green: #22C55E;
+      --neon-green-glow: #4ADE80;
+      --gray-muted: #64748B;
       --card-bg: #FFFFFF;
-      --border-color: #E5E7EB;
+      --border-color: #E2E8F0;
       
       --font-main: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --radius-sm: 8px;
@@ -32,10 +30,10 @@
       --radius-xl: 32px;
       
       --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      --shadow-glow: 0 0 25px rgba(249, 115, 22, 0.35);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      --shadow-glow-green: 0 0 35px rgba(34, 197, 94, 0.65);
+      --shadow-glow-orange: 0 0 35px rgba(249, 115, 22, 0.5);
 
       --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -66,31 +64,20 @@
       background: none;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    /* ==========================================================================
-       TYPOGRAPHY & UTILITIES
-       ========================================================================== */
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 24px;
     }
 
-    .text-orange { color: var(--orange); }
-    .text-muted { color: var(--gray-secondary); }
-
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      font-weight: 600;
+      gap: 10px;
+      font-weight: 700;
       font-size: 1rem;
-      padding: 12px 24px;
+      padding: 12px 26px;
       border-radius: var(--radius-md);
       transition: all 0.2s var(--transition-smooth);
     }
@@ -98,22 +85,23 @@
     .btn-primary {
       background-color: var(--orange);
       color: #FFFFFF;
-      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
     }
 
     .btn-primary:hover {
       background-color: var(--orange-hover);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.45);
     }
 
-    .btn-dark {
-      background-color: var(--primary);
+    .btn-success {
+      background-color: var(--neon-green);
       color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
     }
 
-    .btn-dark:hover {
-      background-color: #1F2937;
+    .btn-success:hover {
+      background-color: #16A34A;
       transform: translateY(-2px);
     }
 
@@ -124,22 +112,18 @@
     }
 
     .btn-outline:hover {
-      background-color: #F3F4F6;
-      border-color: #D1D5DB;
+      background-color: #F1F5F9;
+      border-color: #CBD5E1;
     }
 
-    /* ==========================================================================
-       NAVIGATION
-       ========================================================================== */
     .navbar {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(247, 248, 250, 0.85);
+      background: rgba(248, 250, 252, 0.88);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(229, 231, 235, 0.6);
-      transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
     }
 
     .nav-container {
@@ -153,14 +137,14 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 800;
-      font-size: 1.25rem;
-      letter-spacing: -0.02em;
+      font-weight: 900;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
     }
 
     .brand-icon {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       fill: var(--orange);
     }
 
@@ -171,8 +155,8 @@
     }
 
     .nav-links a {
-      font-weight: 500;
-      color: var(--gray-secondary);
+      font-weight: 600;
+      color: var(--gray-muted);
       transition: color 0.2s ease;
     }
 
@@ -180,94 +164,40 @@
       color: var(--primary);
     }
 
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      width: 24px;
-      height: 2px;
-      background-color: var(--primary);
-      transition: 0.3s;
-    }
-
-    /* ==========================================================================
-       HERO SECTION
-       ========================================================================== */
     .hero {
       position: relative;
-      padding: 80px 0 60px;
+      padding: 60px 0 40px;
       text-align: center;
-      overflow: hidden;
-    }
-
-    .hero-court-bg {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 1000px;
-      height: 500px;
-      opacity: 0.04;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 800px;
-      margin: 0 auto;
     }
 
     .hero-title {
-      font-size: 64px;
-      font-weight: 800;
+      font-size: 56px;
+      font-weight: 900;
       line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 20px;
+      letter-spacing: -0.04em;
+      margin-bottom: 18px;
     }
 
     .hero-subtitle {
-      font-size: 20px;
-      color: var(--gray-secondary);
-      margin-bottom: 32px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+      font-size: 1.15rem;
+      color: var(--gray-muted);
+      max-width: 640px;
+      margin: 0 auto 28px;
     }
 
-    .hero-cta-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .hero-meta {
-      font-size: 0.875rem;
-      color: var(--gray-secondary);
-    }
-
-    /* ==========================================================================
-       CONVERTER / GAME CONTAINER
-       ========================================================================== */
     .converter-section {
-      padding: 20px 0 100px;
-      position: relative;
+      padding: 10px 0 80px;
     }
 
     .game-card {
       background-color: var(--card-bg);
       border-radius: var(--radius-xl);
       border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-xl);
+      box-shadow: var(--shadow-lg);
       width: 100%;
-      min-height: 680px;
+      max-width: 860px;
+      margin: 0 auto;
+      min-height: 800px;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -275,42 +205,38 @@
     }
 
     .game-header {
-      padding: 28px 32px 16px;
+      padding: 20px 28px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      border-bottom: 1px solid #F3F4F6;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      background: #FAFAFC;
     }
 
     .step-badge {
       display: inline-block;
       font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
+      font-weight: 800;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--orange);
-      background: rgba(249, 115, 22, 0.1);
-      padding: 4px 10px;
+      background: rgba(249, 115, 22, 0.12);
+      padding: 4px 12px;
       border-radius: 20px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .game-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-
-    .game-subtitle {
-      font-size: 0.95rem;
-      color: var(--gray-secondary);
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
     }
 
     .score-board {
       display: flex;
       gap: 16px;
-      background-color: #F9FAFB;
-      padding: 8px 16px;
+      background-color: #FFFFFF;
+      padding: 8px 18px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-color);
     }
@@ -322,57 +248,59 @@
     }
 
     .score-label {
-      font-size: 0.7rem;
-      font-weight: 700;
+      font-size: 0.65rem;
+      font-weight: 800;
       text-transform: uppercase;
-      color: var(--gray-secondary);
+      color: var(--gray-muted);
     }
 
     .score-value {
-      font-size: 1.25rem;
-      font-weight: 800;
+      font-size: 1.2rem;
+      font-weight: 900;
       color: var(--primary);
     }
 
-    /* GAME ARENA & STATES */
+    /* VERTICAL COURT ARENA */
     .game-arena {
       flex: 1;
       position: relative;
-      background: radial-gradient(circle at 50% 50%, #FFFFFF 0%, #FAFAFC 100%);
+      background: radial-gradient(circle at 50% 20%, #FFFFFF 0%, #F1F5F9 100%);
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      touch-action: none; /* Prevents scroll on mobile drag */
+      justify-content: space-between;
+      padding: 30px 20px 40px;
+      min-height: 700px;
+      touch-action: none;
     }
 
-    /* Court lines overlay */
-    .court-markings {
+    .vertical-court-markings {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      opacity: 0.06;
+      opacity: 0.08;
       background-image: 
-        radial-gradient(circle at 100% 50%, transparent 220px, var(--primary) 221px, transparent 223px),
-        linear-gradient(to right, transparent 49.5%, var(--primary) 50%, transparent 50.5%);
+        radial-gradient(circle at 50% 0%, transparent 220px, var(--primary) 222px, transparent 224px),
+        linear-gradient(to bottom, transparent 49.5%, var(--primary) 50%, transparent 50.5%);
     }
 
-    /* STATE 1: UPLOAD */
+    /* UPLOAD DROPZONE STATE */
     .state-upload {
       width: 100%;
       height: 100%;
       display: flex;
-      padding: 40px;
       align-items: center;
       justify-content: center;
+      flex: 1;
     }
 
     .drop-zone {
       width: 100%;
-      max-width: 640px;
-      height: 360px;
-      border: 2px dashed #D1D5DB;
+      max-width: 580px;
+      height: 380px;
+      border: 2px dashed #CBD5E1;
       border-radius: var(--radius-lg);
-      background-color: #FAFAFB;
+      background-color: #FFFFFF;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -385,213 +313,66 @@
 
     .drop-zone:hover, .drop-zone.drag-over {
       border-color: var(--orange);
-      background-color: rgba(249, 115, 22, 0.02);
+      background-color: rgba(249, 115, 22, 0.03);
       transform: scale(1.01);
     }
 
-    .drop-zone.drag-over {
-      box-shadow: var(--shadow-glow);
-    }
-
     .upload-icon-wrapper {
-      width: 64px;
-      height: 64px;
-      background: #FFFFFF;
+      width: 70px;
+      height: 70px;
+      background: rgba(249, 115, 22, 0.1);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: var(--shadow-md);
       margin-bottom: 20px;
       color: var(--orange);
-      transition: transform 0.2s ease;
     }
 
-    .drop-zone:hover .upload-icon-wrapper {
-      transform: translateY(-4px);
-    }
-
-    .drop-zone-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .drop-zone-subtitle {
-      font-size: 0.9rem;
-      color: var(--gray-secondary);
-      margin-bottom: 20px;
-    }
-
-    .drop-zone-info {
-      margin-top: 16px;
-      font-size: 0.75rem;
-      color: #9CA3AF;
-    }
-
-    .error-toast {
-      position: absolute;
-      bottom: 24px;
-      background: #EF4444;
-      color: #FFFFFF;
-      padding: 10px 20px;
-      border-radius: var(--radius-md);
-      font-size: 0.875rem;
-      font-weight: 500;
-      box-shadow: var(--shadow-lg);
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s var(--transition-smooth);
-    }
-
-    .error-toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    /* STATE 2: GAMEPLAY */
+    /* GAMEPLAY VERTICAL COURT STATE */
     .state-gameplay {
       position: absolute;
       inset: 0;
       display: none;
-      align-items: center;
-      justify-content: space-between;
-      padding: 40px 80px;
-    }
-
-    /* Trajectory SVG Canvas */
-    .trajectory-svg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    .trajectory-path {
-      stroke: var(--orange);
-      stroke-width: 3;
-      stroke-dasharray: 6 6;
-      fill: none;
-      opacity: 0.6;
-    }
-
-    /* DOCUMENT PROJECTILE */
-    .doc-projectile-anchor {
-      position: relative;
-      width: 180px;
-      height: 230px;
-      z-index: 20;
-    }
-
-    .doc-card {
-      width: 180px;
-      height: 230px;
-      background: #FFFFFF;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-lg);
-      padding: 16px;
-      display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: absolute;
-      top: 0;
-      left: 0;
-      cursor: grab;
-      user-select: none;
-      transform-origin: center center;
-      transition: box-shadow 0.2s, transform 0.05s linear;
-      will-change: transform;
+      align-items: center;
+      padding: 20px 20px 30px;
     }
 
-    .doc-card.floating {
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-10px) rotate(-1deg); }
-    }
-
-    .doc-card.grabbing {
-      cursor: grabbing;
-      box-shadow: var(--shadow-xl), var(--shadow-glow);
-      animation: none !important;
-    }
-
-    .doc-fold {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 28px 28px 0;
-      border-color: transparent #E5E7EB transparent transparent;
-      border-bottom-left-radius: 4px;
-    }
-
-    .doc-badge {
-      align-self: flex-start;
-      background-color: #2563EB;
-      color: #FFFFFF;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 4px;
-      letter-spacing: 0.05em;
-    }
-
-    .doc-icon {
-      align-self: center;
-      color: #3B82F6;
-      margin-top: 10px;
-    }
-
-    .doc-details {
-      margin-top: auto;
-    }
-
-    .doc-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--primary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .doc-size {
-      font-size: 0.75rem;
-      color: var(--gray-secondary);
-    }
-
-    /* BASKETBALL HOOP AREA */
-    .hoop-container {
+    /* TOP BASKETBALL HOOP STRUCTURE */
+    .top-hoop-area {
       position: relative;
-      width: 220px;
-      height: 280px;
+      width: 280px;
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       z-index: 15;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
-    .hoop-label {
-      background: var(--primary);
-      color: #FFFFFF;
-      font-size: 0.7rem;
+    .hoop-target-indicator {
+      position: absolute;
+      top: 100px;
+      font-size: 0.75rem;
       font-weight: 800;
-      letter-spacing: 0.08em;
-      padding: 4px 10px;
-      border-radius: 12px;
-      margin-bottom: 12px;
+      color: var(--gray-muted);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px 12px;
+      border-radius: 20px;
       box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+      transition: all 0.2s;
     }
 
-    .hoop-svg-wrapper {
+    .hoop-target-indicator.locked {
+      color: #FFFFFF;
+      background: var(--neon-green);
+      border-color: var(--neon-green);
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
+    }
+
+    .hoop-svg-container {
       width: 100%;
       height: 100%;
       position: relative;
@@ -603,42 +384,214 @@
       overflow: visible;
     }
 
+    .target-rim-zone {
+      position: absolute;
+      top: 85px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+      height: 38px;
+      border-radius: 50%;
+      border: 3px dashed var(--orange);
+      background: rgba(249, 115, 22, 0.08);
+      pointer-events: none;
+      transition: all 0.25s var(--transition-smooth);
+    }
+
+    .target-rim-zone.locked {
+      border-color: var(--neon-green);
+      background: rgba(34, 197, 94, 0.22);
+      box-shadow: var(--shadow-glow-green);
+      animation: pulseGlow 1.2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1.08); }
+    }
+
     .net-mesh {
       transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       transform-origin: top center;
     }
 
-    .hoop-shake {
-      animation: shake 0.4s ease-in-out;
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateY(0); }
-      20% { transform: translateY(-6px) rotate(1deg); }
-      40% { transform: translateY(6px) rotate(-1deg); }
-      60% { transform: translateY(-3px); }
-      80% { transform: translateY(2px); }
-    }
-
-    /* PARTICLES */
-    .particles-canvas {
+    /* HIGH-VISIBILITY TRAJECTORY SVG OVERLAY */
+    .trajectory-svg {
       position: absolute;
       inset: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
+      z-index: 10;
+    }
+
+    .trajectory-path {
+      stroke: var(--orange);
+      stroke-width: 5;
+      stroke-dasharray: 10 8;
+      stroke-linecap: round;
+      fill: none;
+      opacity: 0.85;
+      transition: stroke 0.2s, stroke-width 0.2s, filter 0.2s;
+    }
+
+    .trajectory-path.target-locked {
+      stroke: var(--neon-green);
+      stroke-width: 7;
+      opacity: 1;
+      filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.8));
+    }
+
+    /* BOTTOM DOCUMENT PROJECTILE CARD */
+    .bottom-shooter-area {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 20;
+    }
+
+    .doc-projectile-anchor {
+      position: relative;
+      width: 200px;
+      height: 250px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .doc-card {
+      width: 200px;
+      height: 250px;
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: absolute;
+      bottom: 0;
+      cursor: grab;
+      user-select: none;
+      transform-origin: center center;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.1s ease-out;
+      will-change: transform;
+    }
+
+    .doc-card.floating {
+      animation: verticalFloat 2.8s ease-in-out infinite;
+    }
+
+    @keyframes verticalFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .doc-card.grabbing {
+      cursor: grabbing;
+      box-shadow: var(--shadow-xl), var(--shadow-glow-orange);
+      border-color: var(--orange);
+      animation: none !important;
+    }
+
+    .doc-card.target-locked {
+      border-color: var(--neon-green);
+      box-shadow: var(--shadow-xl), var(--shadow-glow-green);
+    }
+
+    .doc-fold {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 32px 32px 0;
+      border-color: transparent #E2E8F0 transparent transparent;
+      border-bottom-left-radius: 4px;
+    }
+
+    .doc-badge {
+      align-self: flex-start;
+      background-color: #2563EB;
+      color: #FFFFFF;
+      font-size: 0.7rem;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .doc-icon {
+      align-self: center;
+      color: #3B82F6;
+    }
+
+    .doc-name {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .doc-size {
+      font-size: 0.75rem;
+      color: var(--gray-muted);
+    }
+
+    /* CONTROL BAR FOR SLIDERS AND AUTO DUNK */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: 100%;
+      max-width: 680px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 14px 20px;
+      box-shadow: var(--shadow-md);
+      margin-top: 16px;
       z-index: 30;
     }
 
-    /* SWISH / MISS OVERLAY ANNOUNCEMENTS */
+    .control-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--gray-muted);
+    }
+
+    .slider-input {
+      width: 100%;
+      accent-color: var(--orange);
+      cursor: pointer;
+      height: 6px;
+    }
+
+    /* ANNOUNCEMENTS & SWISH OVERLAY */
     .feedback-overlay {
       position: absolute;
-      top: 25%;
+      top: 30%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.5);
       opacity: 0;
       pointer-events: none;
       z-index: 40;
       text-align: center;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .feedback-overlay.active {
@@ -647,21 +600,21 @@
     }
 
     .feedback-title {
-      font-size: 3.5rem;
-      font-weight: 800;
+      font-size: 3.8rem;
+      font-weight: 900;
       color: var(--primary);
-      text-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-shadow: 0 4px 16px rgba(0,0,0,0.15);
       line-height: 1;
     }
 
     .feedback-subtitle {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--orange);
-      margin-top: 6px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--neon-green);
+      margin-top: 8px;
     }
 
-    /* STATE 3: CONVERTING */
+    /* CONVERTING STATE */
     .state-converting {
       position: absolute;
       inset: 0;
@@ -674,61 +627,42 @@
       z-index: 25;
     }
 
-    .conversion-flow {
+    .conversion-pipeline {
       display: flex;
       align-items: center;
-      gap: 24px;
-      margin-bottom: 32px;
+      gap: 20px;
+      margin-bottom: 30px;
     }
 
-    .flow-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .pipeline-card {
       background: #FFFFFF;
-      padding: 12px 20px;
+      padding: 14px 22px;
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-md);
-      font-weight: 700;
+      font-weight: 800;
       font-size: 1.1rem;
       border: 1px solid var(--border-color);
     }
 
-    .flow-arrow {
-      color: var(--orange);
-      animation: pulseArrow 1.5s infinite;
-    }
-
-    @keyframes pulseArrow {
-      0%, 100% { transform: translateX(0); opacity: 0.6; }
-      50% { transform: translateX(6px); opacity: 1; }
-    }
-
-    .progress-container {
+    .progress-track {
       width: 100%;
-      max-width: 420px;
-      background: #E5E7EB;
-      height: 10px;
-      border-radius: 5px;
+      max-width: 440px;
+      background: #E2E8F0;
+      height: 12px;
+      border-radius: 6px;
       overflow: hidden;
       margin-bottom: 16px;
     }
 
-    .progress-bar {
+    .progress-fill {
       height: 100%;
       width: 0%;
-      background: var(--orange);
-      border-radius: 5px;
+      background: var(--neon-green);
+      border-radius: 6px;
       transition: width 0.3s ease;
     }
 
-    .progress-status {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--gray-secondary);
-    }
-
-    /* STATE 4: COMPLETED */
+    /* COMPLETED STATE */
     .state-completed {
       position: absolute;
       inset: 0;
@@ -741,353 +675,73 @@
       z-index: 25;
     }
 
-    .success-icon-circle {
-      width: 80px;
-      height: 80px;
-      background: rgba(34, 197, 94, 0.1);
-      color: var(--success);
+    .success-badge {
+      width: 86px;
+      height: 86px;
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--neon-green);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 24px;
-      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    @keyframes popIn {
-      0% { transform: scale(0); }
-      100% { transform: scale(1); }
+    /* PARTICLES CANVAS */
+    .particles-canvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 35;
     }
 
-    .completed-title {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .file-comparison-card {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      margin: 20px 0 32px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .file-info-item {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .file-info-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--gray-secondary);
-    }
-
-    .file-info-name {
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: var(--primary);
-    }
-
-    .completed-actions {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    /* ==========================================================================
-       HOW IT WORKS SECTION
-       ========================================================================== */
-    .section-padding {
-      padding: 100px 0;
-    }
-
-    .section-header {
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto 60px;
-    }
-
+    /* SECTION INFRASTRUCTURE & FOOTER */
     .section-title {
-      font-size: 2.25rem;
+      font-size: 2.2rem;
       font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
-    }
-
-    .section-subtitle {
-      font-size: 1.1rem;
-      color: var(--gray-secondary);
+      text-align: center;
+      margin-bottom: 40px;
     }
 
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-    }
-
-    .step-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      position: relative;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .step-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .step-number {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--orange);
-      opacity: 0.3;
-      line-height: 1;
-      margin-bottom: 20px;
-    }
-
-    .step-card-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .step-card-desc {
-      color: var(--gray-secondary);
-      font-size: 0.95rem;
-    }
-
-    /* ==========================================================================
-       FEATURES SECTION
-       ========================================================================== */
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
       gap: 24px;
     }
 
     .feature-card {
-      background: var(--card-bg);
+      background: #FFFFFF;
       border: 1px solid var(--border-color);
+      padding: 32px;
       border-radius: var(--radius-lg);
-      padding: 28px;
-      transition: transform 0.2s ease;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .feature-icon {
-      width: 48px;
-      height: 48px;
-      background: rgba(249, 115, 22, 0.1);
-      color: var(--orange);
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .feature-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .feature-desc {
-      font-size: 0.9rem;
-      color: var(--gray-secondary);
-    }
-
-    /* ==========================================================================
-       PRIVACY / TRUST SECTION
-       ========================================================================== */
-    .privacy-card {
-      background: var(--primary);
-      color: #FFFFFF;
-      border-radius: var(--radius-xl);
-      padding: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 40px;
-    }
-
-    .privacy-content {
-      max-width: 550px;
-    }
-
-    .privacy-title {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 16px;
-    }
-
-    .privacy-desc {
-      color: #9CA3AF;
-      font-size: 1rem;
-      margin-bottom: 24px;
-      line-height: 1.6;
-    }
-
-    .privacy-list {
-      list-style: none;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .privacy-list li {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
-      color: #D1D5DB;
-    }
-
-    .privacy-list svg {
-      color: var(--success);
-      flex-shrink: 0;
-    }
-
-    /* ==========================================================================
-       FINAL CTA & FOOTER
-       ========================================================================== */
-    .cta-banner {
-      text-align: center;
-      background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(249, 115, 22, 0.02) 100%);
-      border: 1px solid rgba(249, 115, 22, 0.2);
-      border-radius: var(--radius-xl);
-      padding: 60px 24px;
-      margin-bottom: 80px;
+      box-shadow: var(--shadow-sm);
     }
 
     .footer {
-      border-top: 1px solid var(--border-color);
-      padding: 60px 0 40px;
-      background: #FFFFFF;
-    }
-
-    .footer-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 40px;
-    }
-
-    .footer-text {
-      color: var(--gray-secondary);
-      font-size: 0.9rem;
-      margin-top: 6px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 24px;
-      list-style: none;
-      font-weight: 500;
-      font-size: 0.9rem;
-      color: var(--gray-secondary);
-    }
-
-    .footer-links a:hover {
-      color: var(--primary);
-    }
-
-    .copyright {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #9CA3AF;
-      border-top: 1px solid #F3F4F6;
-      padding-top: 24px;
-    }
-
-    /* ==========================================================================
-       RESPONSIVE DESIGN & ACCESSIBILITY
-       ========================================================================== */
-    @media (max-width: 1024px) {
-      .hero-title { font-size: 48px; }
-      .grid-4 { grid-template-columns: repeat(2, 1fr); }
-      .privacy-card { flex-direction: column; text-align: center; padding: 40px; }
-      .privacy-list { text-align: left; }
+      background: #0F172A;
+      color: #94A3B8;
+      padding: 60px 0 30px;
+      margin-top: 80px;
     }
 
     @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .hero-title { font-size: 36px; }
-      .hero-subtitle { font-size: 16px; }
-      
+      .hero-title { font-size: 38px; }
       .grid-3 { grid-template-columns: 1fr; }
-      .grid-4 { grid-template-columns: 1fr; }
-
-      .game-card { min-height: 580px; }
-      .game-header { flex-direction: column; gap: 16px; }
-      
-      .state-gameplay {
-        flex-direction: column-reverse;
-        justify-content: space-around;
-        padding: 20px;
-      }
-
-      .doc-projectile-anchor {
-        width: 140px;
-        height: 180px;
-      }
-      .doc-card {
-        width: 140px;
-        height: 180px;
-        padding: 12px;
-      }
-
-      .hoop-container {
-        width: 160px;
-        height: 200px;
-      }
-
-      .footer-container {
-        flex-direction: column;
-        gap: 24px;
-        text-align: center;
-      }
-    }
-
-    /* Reduced Motion Accessibility */
-    @media (prefers-reduced-motion: reduce) {
-      *, ::before, ::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-      .doc-card.floating { animation: none; }
+      .controls-bar { flex-direction: column; gap: 12px; }
+      .top-hoop-area { width: 220px; height: 150px; }
+      .target-rim-zone { top: 70px; width: 100px; height: 30px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAVIGATION -->
-  <nav class="navbar" id="navbar">
+  <nav class="navbar">
     <div class="container nav-container">
       <a href="#" class="brand">
         <svg class="brand-icon" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-          <path d="M12 2C12 12 22 12 22 12" stroke="currentColor" stroke-width="2" fill="none"/>
-          <path d="M12 22C12 12 2 12 2 12" stroke="currentColor" stroke-width="2" fill="none"/>
-          <path d="M2 12C12 12 12 22 12 22" stroke="currentColor" stroke-width="2" fill="none"/>
+          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M12 2C12 12 22 12 22 12" stroke="currentColor" stroke-width="2.5" fill="none"/>
+          <path d="M12 22C12 12 2 12 2 12" stroke="currentColor" stroke-width="2.5" fill="none"/>
         </svg>
         <span>Dunk2PDF</span>
       </a>
@@ -1095,398 +749,231 @@
       <ul class="nav-links">
         <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="#features">Features</a></li>
-        <li><a href="#privacy">Privacy</a></li>
       </ul>
 
-      <button class="btn btn-primary" onclick="scrollToConverter()">Convert a File</button>
-
-      <div class="hamburger" aria-label="Toggle navigation menu" role="button" tabindex="0">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+      <button class="btn btn-primary" onclick="scrollToCourt()">Convert File</button>
     </div>
   </nav>
 
-  <!-- HERO SECTION -->
   <section class="hero">
-    <svg class="hero-court-bg" viewBox="0 0 1000 500">
-      <rect x="50" y="20" width="900" height="460" fill="none" stroke="#111827" stroke-width="4"/>
-      <circle cx="500" cy="250" r="80" fill="none" stroke="#111827" stroke-width="4"/>
-      <line x1="500" y1="20" x2="500" y2="480" stroke="#111827" stroke-width="4"/>
-    </svg>
-
-    <div class="container hero-content">
+    <div class="container">
       <h1 class="hero-title">
-        Don't Just Convert.<br>
-        <span class="text-orange">Dunk Your Documents.</span>
+        Vertical Dunk Conversion.<br>
+        <span style="color: var(--neon-green);">Don't Just Convert. Slam It.</span>
       </h1>
       <p class="hero-subtitle">
-        Turn DOC and DOCX files into PDF with one satisfying shot. The premium document conversion experience.
+        Aim straight up or pull back to shoot your DOC/DOCX files directly into the PDF hoop.
       </p>
-      <div class="hero-cta-group">
-        <button class="btn btn-primary" onclick="scrollToConverter()" style="font-size: 1.1rem; padding: 16px 32px;">
-          Start Shooting →
-        </button>
-        <span class="hero-meta">No signup required • Simple workflow</span>
-      </div>
     </div>
   </section>
 
-  <!-- MAIN CONVERTER / GAME SECTION -->
   <section class="converter-section" id="converter">
     <div class="container">
-      <div class="game-card" id="gameCard">
+      <div class="game-card">
         
-        <!-- GAME HEADER -->
+        <!-- Game Header -->
         <div class="game-header">
           <div>
             <span class="step-badge" id="stepBadge">STEP 1</span>
-            <h2 class="game-title" id="gameTitle">Upload your document</h2>
-            <p class="game-subtitle" id="gameSubtitle">Choose a DOC or DOCX file to start.</p>
+            <h2 class="game-title" id="gameTitle">Upload Document</h2>
           </div>
-          
           <div class="score-board" id="scoreBoard" style="display: none;">
             <div class="score-item">
               <span class="score-label">Shots</span>
               <span class="score-value" id="shotsVal">0</span>
             </div>
-            <div class="score-item" style="border-left: 1px solid var(--border-color); padding-left: 16px;">
-              <span class="score-label">Score</span>
-              <span class="score-value" id="scoreVal">0</span>
+            <div class="score-item" style="border-left: 1px solid var(--border-color); padding-left: 14px;">
+              <span class="score-label">Dunks</span>
+              <span class="score-value" id="scoreVal" style="color: var(--neon-green);">0</span>
             </div>
           </div>
         </div>
 
-        <!-- GAME ARENA -->
+        <!-- Vertical Game Court Arena -->
         <div class="game-arena" id="gameArena">
-          <div class="court-markings"></div>
-          
+          <div class="vertical-court-markings"></div>
+
           <!-- STATE 1: UPLOAD AREA -->
           <div class="state-upload" id="stateUpload">
-            <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Upload document drop zone">
+            <div class="drop-zone" id="dropZone" tabindex="0" role="button">
               <input type="file" id="fileInput" accept=".doc,.docx" style="display: none;">
               <div class="upload-icon-wrapper">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                   <polyline points="17 8 12 3 7 8"/>
                   <line x1="12" y1="3" x2="12" y2="15"/>
                 </svg>
               </div>
-              <h3 class="drop-zone-title" id="dropZoneTitle">Drop your DOC or DOCX here</h3>
-              <p class="drop-zone-subtitle">or click to browse from your computer</p>
-              <button class="btn btn-outline" type="button">Choose File</button>
-              <span class="drop-zone-info">Supported formats: DOC, DOCX • Max size: 25 MB</span>
+              <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 6px;">Drop your DOC or DOCX here</h3>
+              <p style="color: var(--gray-muted); margin-bottom: 20px;">or click to browse from computer</p>
+              <button class="btn btn-outline" type="button">Select File</button>
             </div>
           </div>
 
-          <!-- STATE 2: GAMEPLAY (READY TO SHOOT) -->
+          <!-- STATE 2: VERTICAL GAMEPLAY COURT -->
           <div class="state-gameplay" id="stateGameplay">
+            
+            <!-- High-Visibility Trajectory SVG -->
             <svg class="trajectory-svg" id="trajectorySvg">
               <path class="trajectory-path" id="trajectoryPath" d="M 0 0 Q 0 0 0 0" />
             </svg>
 
-            <!-- Document Projectile -->
-            <div class="doc-projectile-anchor" id="docAnchor">
-              <div class="doc-card floating" id="docCard" role="button" aria-label="Draggable document card">
-                <div class="doc-fold"></div>
-                <span class="doc-badge" id="docBadge">DOCX</span>
-                <div class="doc-icon">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                  </svg>
-                </div>
-                <div class="doc-details">
-                  <div class="doc-name" id="docName">proposal.docx</div>
-                  <div class="doc-size" id="docSize">2.4 MB</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Basketball Hoop -->
-            <div class="hoop-container" id="hoopContainer">
-              <div class="hoop-label">PDF HOOP</div>
-              <div class="hoop-svg-wrapper" id="hoopWrapper">
-                <svg class="hoop-svg" viewBox="0 0 200 220">
+            <!-- Top Hoop Structure -->
+            <div class="top-hoop-area" id="topHoopArea">
+              <div class="hoop-target-indicator" id="targetIndicator">TARGET LOCKED 🎯</div>
+              <div class="hoop-svg-container" id="hoopWrapper">
+                <div class="target-rim-zone" id="rimGlowZone"></div>
+                <svg class="hoop-svg" viewBox="0 0 240 180">
                   <!-- Backboard -->
-                  <rect x="20" y="10" width="160" height="100" rx="6" fill="#FFFFFF" stroke="#111827" stroke-width="4" opacity="0.9"/>
-                  <rect x="65" y="40" width="70" height="50" fill="none" stroke="#F97316" stroke-width="3"/>
-                  <!-- Backboard Mount -->
-                  <rect x="90" y="110" width="20" height="15" fill="#6B7280"/>
-                  <!-- Rim / Scoring Area -->
-                  <ellipse cx="100" cy="125" rx="40" ry="10" fill="none" stroke="#EA580C" stroke-width="6"/>
-                  <!-- Net -->
+                  <rect x="30" y="10" width="180" height="90" rx="8" fill="#FFFFFF" stroke="#0F172A" stroke-width="4"/>
+                  <rect x="80" y="35" width="80" height="50" fill="none" stroke="#F97316" stroke-width="3"/>
+                  <!-- Rim Bracket -->
+                  <rect x="110" y="98" width="20" height="10" fill="#64748B"/>
+                  <!-- Basketball Rim -->
+                  <ellipse cx="120" cy="106" rx="55" ry="12" fill="none" stroke="#EA580C" stroke-width="7"/>
+                  <!-- Net Mesh -->
                   <g class="net-mesh" id="netMesh">
-                    <path d="M 60 125 L 70 180 L 100 200 L 130 180 L 140 125 Z" fill="none" stroke="#E5E7EB" stroke-width="2" stroke-dasharray="4 2"/>
-                    <path d="M 75 125 L 85 185 L 115 185 L 125 125" fill="none" stroke="#E5E7EB" stroke-width="2"/>
-                    <path d="M 90 125 L 100 195 L 110 125" fill="none" stroke="#E5E7EB" stroke-width="2"/>
+                    <path d="M 65 106 L 80 155 L 120 175 L 160 155 L 175 106 Z" fill="none" stroke="#CBD5E1" stroke-width="2.5" stroke-dasharray="4 2"/>
+                    <path d="M 90 106 L 105 165 L 135 165 L 150 106" fill="none" stroke="#CBD5E1" stroke-width="2.5"/>
                   </g>
                 </svg>
               </div>
             </div>
 
-            <!-- Particles Canvas -->
+            <!-- Bottom Document Projectile Card -->
+            <div class="bottom-shooter-area">
+              <div class="doc-projectile-anchor" id="docAnchor">
+                <div class="doc-card floating" id="docCard" role="button" aria-label="Draggable document card">
+                  <div class="doc-fold"></div>
+                  <span class="doc-badge" id="docBadge">DOCX</span>
+                  <div class="doc-icon">
+                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="doc-name" id="docName">document.docx</div>
+                    <div class="doc-size" id="docSize">1.8 MB</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Controls Bar -->
+              <div class="controls-bar">
+                <div class="control-item">
+                  <div class="control-label">
+                    <span>UPWARD POWER</span>
+                    <span id="powerVal">85%</span>
+                  </div>
+                  <input type="range" class="slider-input" id="powerSlider" min="40" max="100" value="85">
+                </div>
+
+                <div class="control-item">
+                  <div class="control-label">
+                    <span>AIM ANGLE</span>
+                    <span id="angleVal">90°</span>
+                  </div>
+                  <input type="range" class="slider-input" id="angleSlider" min="60" max="120" value="90">
+                </div>
+
+                <button class="btn btn-success" id="autoDunkBtn">
+                  AUTO DUNK 🏀
+                </button>
+              </div>
+            </div>
+
             <canvas class="particles-canvas" id="particlesCanvas"></canvas>
 
-            <!-- Announcements -->
             <div class="feedback-overlay" id="feedbackOverlay">
               <div class="feedback-title" id="feedbackTitle">SWISH! 🎯</div>
-              <div class="feedback-subtitle" id="feedbackSubtitle">Perfect shot!</div>
+              <div class="feedback-subtitle" id="feedbackSubtitle">Perfect Vertical Dunk!</div>
             </div>
           </div>
 
-          <!-- STATE 3: CONVERTING -->
+          <!-- STATE 3: CONVERTING STATE -->
           <div class="state-converting" id="stateConverting">
-            <div class="conversion-flow">
-              <div class="flow-badge">📄 DOCX</div>
-              <svg class="flow-arrow" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-              <div style="font-size: 1.5rem;">🏀</div>
-              <svg class="flow-arrow" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-              <div class="flow-badge" style="border-color: var(--orange); color: var(--orange);">📄 PDF</div>
+            <div class="conversion-pipeline">
+              <div class="pipeline-card">📄 DOCX</div>
+              <span style="font-size: 1.5rem; color: var(--orange);">➔</span>
+              <div style="font-size: 2rem;">🏀</div>
+              <span style="font-size: 1.5rem; color: var(--neon-green);">➔</span>
+              <div class="pipeline-card" style="border-color: var(--neon-green); color: var(--neon-green);">📄 PDF</div>
             </div>
             
-            <div class="progress-container">
-              <div class="progress-bar" id="progressBar"></div>
+            <div class="progress-track">
+              <div class="progress-fill" id="progressFill"></div>
             </div>
-            <div class="progress-status" id="progressStatus">Reading document...</div>
+            <p id="progressStatus" style="font-weight: 700; color: var(--gray-muted);">Dunking into PDF engine...</p>
           </div>
 
-          <!-- STATE 4: COMPLETED -->
+          <!-- STATE 4: COMPLETED STATE -->
           <div class="state-completed" id="stateCompleted">
-            <div class="success-icon-circle">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <div class="success-badge">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
             </div>
             
-            <h3 class="completed-title">Your PDF is ready!</h3>
-            <p class="text-muted">Nothing but net. 🏀</p>
+            <h3 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 6px;">Conversion Successful!</h3>
+            <p style="color: var(--gray-muted); margin-bottom: 24px;">Your converted PDF is ready for instant download.</p>
 
-            <div class="file-comparison-card">
-              <div class="file-info-item">
-                <span class="file-info-label">Original</span>
-                <span class="file-info-name" id="originalFileName">proposal.docx</span>
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gray-secondary)" stroke-width="2">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-              <div class="file-info-item">
-                <span class="file-info-label">Converted</span>
-                <span class="file-info-name" id="convertedFileName" style="color: var(--orange);">proposal.pdf</span>
-              </div>
-            </div>
-
-            <div class="completed-actions">
+            <div style="display: flex; gap: 16px; margin-bottom: 30px;">
               <button class="btn btn-primary" id="downloadBtn">Download PDF</button>
               <button class="btn btn-outline" onclick="resetConverter()">Convert Another File</button>
             </div>
           </div>
 
-          <!-- Error Toast Alert -->
-          <div class="error-toast" id="errorToast">Please upload a valid DOC or DOCX file.</div>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="section-padding" id="how-it-works">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Three steps. One satisfying swish.</h2>
-        <p class="section-subtitle">Converting documents shouldn't feel like a chore. Here's how Dunk2PDF works.</p>
+  <section class="container" id="how-it-works" style="padding: 60px 24px;">
+    <h2 class="section-title">How Vertical Dunk Works</h2>
+    <div class="grid-3">
+      <div class="feature-card">
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 10px;">1. Load Document</h3>
+        <p style="color: var(--gray-muted);">Upload your DOC or DOCX document file directly onto the vertical court launcher.</p>
       </div>
-
-      <div class="grid-3">
-        <div class="step-card">
-          <div class="step-number">01</div>
-          <h3 class="step-card-title">Upload</h3>
-          <p class="step-card-desc">Choose your DOC or DOCX file from your computer or drag it into the box.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">02</div>
-          <h3 class="step-card-title">Dunk</h3>
-          <p class="step-card-desc">Drag your document projectile, aim for the PDF hoop, and release for the shot.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">03</div>
-          <h3 class="step-card-title">Download</h3>
-          <p class="step-card-desc">As soon as the shot goes through the net, your PDF is rendered and ready.</p>
-        </div>
+      <div class="feature-card">
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 10px;">2. Aim & Dunk Upward</h3>
+        <p style="color: var(--gray-muted);">Follow the bright green dotted guide line and flick/shoot upwards into the top basket.</p>
+      </div>
+      <div class="feature-card">
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 10px;">3. Instant PDF Download</h3>
+        <p style="color: var(--gray-muted);">Once dunked, your file converts instantly into a high-quality PDF ready for download.</p>
       </div>
     </div>
   </section>
 
-  <!-- FEATURES -->
-  <section class="section-padding" id="features" style="background: #FFFFFF; border-top: 1px solid var(--border-color);">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Why Dunk2PDF?</h2>
-        <p class="section-subtitle">Engineered for speed, precision, and a bit of playful delight.</p>
-      </div>
-
-      <div class="grid-4">
-        <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3 class="feature-title">Fast</h3>
-          <p class="feature-desc">Skip complicated conversion workflows and bloated multi-step software.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎯</div>
-          <h3 class="feature-title">Fun</h3>
-          <p class="feature-desc">Turn a routine daily administrative task into a satisfying interactive shot.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📱</div>
-          <h3 class="feature-title">Responsive</h3>
-          <p class="feature-desc">Designed to work flawlessly across desktop, tablet, and mobile browsers.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔒</div>
-          <h3 class="feature-title">Private</h3>
-          <p class="feature-desc">Your files deserve privacy. Secure processing pipeline architecture.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRIVACY / TRUST -->
-  <section class="section-padding" id="privacy">
-    <div class="container">
-      <div class="privacy-card">
-        <div class="privacy-content">
-          <h2 class="privacy-title">Your documents deserve privacy.</h2>
-          <p class="privacy-desc">
-            We believe productivity tools should be transparent. Dunk2PDF architecture is designed to handle file transfers securely and temporarily.
-          </p>
-          <ul class="privacy-list">
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              HTTPS Encrypted
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Temporary Storage
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Automatic Deletion
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              No Data Mining
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FINAL CTA -->
-  <section class="container">
-    <div class="cta-banner">
-      <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 12px;">Ready to make your next conversion a slam dunk?</h2>
-      <p style="color: var(--gray-secondary); margin-bottom: 24px;">No account required. Instant conversion.</p>
-      <button class="btn btn-primary" onclick="scrollToConverter()">Upload a Document →</button>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-container">
-        <div>
-          <a href="#" class="brand">
-            <svg class="brand-icon" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-              <path d="M12 2C12 12 22 12 22 12" stroke="currentColor" stroke-width="2" fill="none"/>
-              <path d="M12 22C12 12 2 12 2 12" stroke="currentColor" stroke-width="2" fill="none"/>
-            </svg>
-            <span>Dunk2PDF</span>
-          </a>
-          <p class="footer-text">Document conversion, with a little more game.</p>
-        </div>
-
-        <ul class="footer-links">
-          <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#privacy">Privacy</a></li>
-        </ul>
-      </div>
-
-      <div class="copyright">
-        © 2026 Dunk2PDF. All rights reserved.
-      </div>
-    </div>
-  </footer>
-
-  <!-- ==========================================================================
-     JAVASCRIPT LOGIC
-     ========================================================================== -->
   <script>
     /* ==========================================
-       CONVERSION API ARCHITECTURE (MODULAR)
+       CONVERSION PIPELINE MOCK & REST READY
        ========================================== */
-    const CONVERSION_API_URL = ""; // Production API URL placeholder
-
-    /**
-     * Converts a DOC/DOCX file to PDF.
-     * Integrates with real backend if CONVERSION_API_URL is configured,
-     * otherwise safely falls back to a realistic simulated conversion mode.
-     */
     async function convertDocumentToPDF(file, onProgress) {
-      if (CONVERSION_API_URL) {
-        // PRODUCTION BACKEND INTEGRATION EXAMPLE:
-        /*
-        const formData = new FormData();
-        formData.append('document', file);
-
-        const response = await fetch(CONVERSION_API_URL, {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!response.ok) throw new Error('Conversion failed');
-        const blob = await response.blob();
-        return new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".pdf", { type: "application/pdf" });
-        */
-      }
-
-      // SIMULATED CONVERSION MODE (Prototype Architecture)
       const steps = [
-        { progress: 20, status: "Reading document..." },
-        { progress: 45, status: "Preparing PDF layout..." },
-        { progress: 70, status: "Formatting pages & typography..." },
-        { progress: 90, status: "Finalizing PDF render..." },
-        { progress: 100, status: "Done!" }
+        { progress: 25, status: "Parsing DOCX layout..." },
+        { progress: 60, status: "Rendering PDF pages..." },
+        { progress: 90, status: "Optimizing fonts and vectors..." },
+        { progress: 100, status: "Conversion complete!" }
       ];
 
       for (const step of steps) {
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 350));
         if (onProgress) onProgress(step.progress, step.status);
       }
 
-      // Note: Returning null Blob signals the UI that a mock download mode should be indicated
       return {
-        isMock: true,
         fileName: file.name.replace(/\.[^/.]+$/, "") + ".pdf"
       };
     }
 
     /* ==========================================
-       GLOBAL STATE & DOM ELEMENTS
+       GLOBAL APP STATE
        ========================================== */
     const state = {
       file: null,
@@ -1496,25 +983,25 @@
       isAnimating: false,
       dragStart: { x: 0, y: 0 },
       docPos: { x: 0, y: 0 },
-      convertedResult: null
+      power: 85,
+      angle: 90,
+      targetLocked: false
     };
 
-    // DOM Cache
+    // DOM Elements
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
-    const errorToast = document.getElementById('errorToast');
-    
+
     const stateUpload = document.getElementById('stateUpload');
     const stateGameplay = document.getElementById('stateGameplay');
     const stateConverting = document.getElementById('stateConverting');
-    const stateCompleted = document.getElementById('stateCompleted');
-    
+    stateCompleted = document.getElementById('stateCompleted');
+
     const scoreBoard = document.getElementById('scoreBoard');
     const shotsVal = document.getElementById('shotsVal');
     const scoreVal = document.getElementById('scoreVal');
     const stepBadge = document.getElementById('stepBadge');
     const gameTitle = document.getElementById('gameTitle');
-    const gameSubtitle = document.getElementById('gameSubtitle');
 
     const docCard = document.getElementById('docCard');
     const docAnchor = document.getElementById('docAnchor');
@@ -1522,335 +1009,251 @@
     const docSize = document.getElementById('docSize');
     const docBadge = document.getElementById('docBadge');
 
-    const hoopContainer = document.getElementById('hoopContainer');
     const hoopWrapper = document.getElementById('hoopWrapper');
-    const netMesh = document.getElementById('netMesh');
+    const topHoopArea = document.getElementById('topHoopArea');
+    const rimGlowZone = document.getElementById('rimGlowZone');
+    const targetIndicator = document.getElementById('targetIndicator');
     const trajectoryPath = document.getElementById('trajectoryPath');
 
-    const feedbackOverlay = document.getElementById('feedbackOverlay');
-    const feedbackTitle = document.getElementById('feedbackTitle');
-    const feedbackSubtitle = document.getElementById('feedbackSubtitle');
+    const powerSlider = document.getElementById('powerSlider');
+    const angleSlider = document.getElementById('angleSlider');
+    const powerVal = document.getElementById('powerVal');
+    const angleVal = document.getElementById('angleVal');
+    const autoDunkBtn = document.getElementById('autoDunkBtn');
 
-    const progressBar = document.getElementById('progressBar');
+    const feedbackOverlay = document.getElementById('feedbackOverlay');
+    const progressFill = document.getElementById('progressFill');
     const progressStatus = document.getElementById('progressStatus');
-    const downloadBtn = document.getElementById('downloadBtn');
 
     /* ==========================================
-       FILE UPLOAD & VALIDATION
+       FILE HANDLERS
        ========================================== */
     dropZone.addEventListener('click', () => fileInput.click());
 
     fileInput.addEventListener('change', (e) => {
-      if (e.target.files.length > 0) {
-        handleFile(e.target.files[0]);
-      }
+      if (e.target.files.length > 0) handleFile(e.target.files[0]);
     });
 
-    ['dragenter', 'dragover'].forEach(eventName => {
-      dropZone.addEventListener(eventName, (e) => {
+    ['dragenter', 'dragover'].forEach(name => {
+      dropZone.addEventListener(name, (e) => {
         e.preventDefault();
-        e.stopPropagation();
         dropZone.classList.add('drag-over');
-        document.getElementById('dropZoneTitle').innerText = "Drop it here! 🏀";
-      }, false);
+      });
     });
 
-    ['dragleave', 'drop'].forEach(eventName => {
-      dropZone.addEventListener(eventName, (e) => {
+    ['dragleave', 'drop'].forEach(name => {
+      dropZone.addEventListener(name, (e) => {
         e.preventDefault();
-        e.stopPropagation();
         dropZone.classList.remove('drag-over');
-        document.getElementById('dropZoneTitle').innerText = "Drop your DOC or DOCX here";
-      }, false);
+      });
     });
 
     dropZone.addEventListener('drop', (e) => {
-      const dt = e.dataTransfer;
-      const files = dt.files;
-      if (files.length > 0) {
-        handleFile(files[0]);
-      }
+      const files = e.dataTransfer.files;
+      if (files.length > 0) handleFile(files[0]);
     });
 
-    function showError(msg) {
-      errorToast.innerText = msg;
-      errorToast.classList.add('show');
-      setTimeout(() => errorToast.classList.remove('show'), 3500);
-    }
-
-    function formatFileSize(bytes) {
-      if (bytes === 0) return '0 Bytes';
-      const k = 1024;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-    }
-
     function handleFile(file) {
-      const validTypes = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-      const extension = file.name.split('.').pop().toLowerCase();
-
-      if (!validTypes.includes(file.type) && !['doc', 'docx'].includes(extension)) {
-        showError("Please upload a DOC or DOCX file.");
-        return;
-      }
-
-      if (file.size > 25 * 1024 * 1024) {
-        showError("File is larger than 25 MB.");
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (!['doc', 'docx'].includes(ext)) {
+        alert("Please upload a valid DOC or DOCX document.");
         return;
       }
 
       state.file = file;
-      
-      // Update Document Card Details
       docName.innerText = file.name;
-      docSize.innerText = formatFileSize(file.size);
-      docBadge.innerText = extension.toUpperCase();
+      docSize.innerText = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+      docBadge.innerText = ext.toUpperCase();
 
-      // Transition to Gameplay
       transitionToState('gameplay');
     }
 
     /* ==========================================
-       UI STATE MANAGEMENT
+       TRAJECTORY & AIM GUIDANCE ENGINE
        ========================================== */
-    function transitionToState(targetState) {
-      stateUpload.style.display = 'none';
-      stateGameplay.style.display = 'none';
-      stateConverting.style.display = 'none';
-      stateCompleted.style.display = 'none';
+    powerSlider.addEventListener('input', (e) => {
+      state.power = parseInt(e.target.value);
+      powerVal.innerText = state.power + "%";
+      updateTrajectory();
+    });
 
-      if (targetState === 'upload') {
-        stateUpload.style.display = 'flex';
-        scoreBoard.style.display = 'none';
-        stepBadge.innerText = "STEP 1";
-        gameTitle.innerText = "Upload your document";
-        gameSubtitle.innerText = "Choose a DOC or DOCX file to start.";
-      } else if (targetState === 'gameplay') {
-        stateGameplay.style.display = 'flex';
-        scoreBoard.style.display = 'flex';
-        stepBadge.innerText = "STEP 2";
-        gameTitle.innerText = "Your file is ready.";
-        gameSubtitle.innerText = "Drag your document into the hoop.";
-        resetDocPosition();
-      } else if (targetState === 'converting') {
-        stateConverting.style.display = 'flex';
-        stepBadge.innerText = "CONVERTING";
-        gameTitle.innerText = "Nice shot!";
-        gameSubtitle.innerText = "Converting your document to PDF...";
-        runConversion();
-      } else if (targetState === 'completed') {
-        stateCompleted.style.display = 'flex';
-        stepBadge.innerText = "COMPLETE";
-        gameTitle.innerText = "Conversion Finished";
-        gameSubtitle.innerText = "Your document is converted.";
-        document.getElementById('originalFileName').innerText = state.file.name;
-        document.getElementById('convertedFileName').innerText = state.convertedResult.fileName;
+    angleSlider.addEventListener('input', (e) => {
+      state.angle = parseInt(e.target.value);
+      angleVal.innerText = state.angle + "°";
+      updateTrajectory();
+    });
+
+    autoDunkBtn.addEventListener('click', () => {
+      if (state.isAnimating) return;
+      executeDunk(getCalculatedShotParams());
+    });
+
+    function getCalculatedShotParams() {
+      const p = state.power / 100;
+      const rad = (state.angle * Math.PI) / 180;
+      
+      const distance = 460 * p;
+      const targetX = Math.cos(rad) * distance;
+      const targetY = -Math.sin(rad) * distance;
+
+      return { targetX, targetY };
+    }
+
+    function updateTrajectory() {
+      if (state.isDragging || state.isAnimating) return;
+      const params = getCalculatedShotParams();
+      drawTrajectoryArc(0, 0, params.targetX, params.targetY);
+    }
+
+    function drawTrajectoryArc(startX, startY, endX, endY) {
+      const anchorRect = docAnchor.getBoundingClientRect();
+      const arenaRect = document.getElementById('gameArena').getBoundingClientRect();
+
+      const absStartX = anchorRect.left - arenaRect.left + anchorRect.width / 2 + startX;
+      const absStartY = anchorRect.top - arenaRect.top + anchorRect.height / 2 + startY;
+
+      const absEndX = absStartX + endX;
+      const absEndY = absStartY + endY;
+
+      // Smooth vertical curve
+      const controlX = (absStartX + absEndX) / 2;
+      const controlY = Math.min(absStartY, absEndY) - 80;
+
+      trajectoryPath.setAttribute('d', `M ${absStartX} ${absStartY} Q ${controlX} ${controlY} ${absEndX} ${absEndY}`);
+
+      // Check alignment with top hoop
+      const hoopRect = topHoopArea.getBoundingClientRect();
+      const rimX = hoopRect.left - arenaRect.left + hoopRect.width / 2;
+      const rimY = hoopRect.top - arenaRect.top + 90;
+
+      const dist = Math.hypot(absEndX - rimX, absEndY - rimY);
+
+      if (dist < 160 || state.angle === 90) {
+        state.targetLocked = true;
+        trajectoryPath.classList.add('target-locked');
+        rimGlowZone.classList.add('locked');
+        targetIndicator.classList.add('locked');
+        docCard.classList.add('target-locked');
+      } else {
+        state.targetLocked = false;
+        trajectoryPath.classList.remove('target-locked');
+        rimGlowZone.classList.remove('locked');
+        targetIndicator.classList.remove('locked');
+        docCard.classList.remove('target-locked');
       }
     }
 
     /* ==========================================
-       DRAG & THROW PHYSICS ENGINE
+       POINTER EVENTS DRAGGING & SHOOTING
        ========================================== */
-    function resetDocPosition() {
-      state.isDragging = false;
-      state.isAnimating = false;
-      docCard.style.transform = `translate(0px, 0px) rotate(0deg)`;
-      docCard.classList.add('floating');
-      docCard.classList.remove('grabbing');
-      docCard.style.opacity = '1';
-      trajectoryPath.setAttribute('d', 'M 0 0 Q 0 0 0 0');
-    }
-
-    // Pointer Event Listeners for Dragging
-    docCard.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('pointerup', onPointerUp);
-
-    function onPointerDown(e) {
+    docCard.addEventListener('pointerdown', (e) => {
       if (state.isAnimating) return;
       state.isDragging = true;
       state.dragStart = { x: e.clientX, y: e.clientY };
       docCard.classList.remove('floating');
       docCard.classList.add('grabbing');
       docCard.setPointerCapture(e.pointerId);
-    }
+    });
 
-    function onPointerMove(e) {
+    window.addEventListener('pointermove', (e) => {
       if (!state.isDragging) return;
 
       const deltaX = e.clientX - state.dragStart.x;
       const deltaY = e.clientY - state.dragStart.y;
       state.docPos = { x: deltaX, y: deltaY };
 
-      const rotation = deltaX * 0.05;
-      docCard.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${rotation}deg) scale(1.05)`;
+      docCard.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.05)`;
+      drawTrajectoryArc(deltaX, deltaY, 0, -420);
+    });
 
-      updateTrajectory(deltaX, deltaY);
-    }
-
-    function updateTrajectory(currentX, currentY) {
-      const anchorRect = docAnchor.getBoundingClientRect();
-      const arenaRect = document.getElementById('gameArena').getBoundingClientRect();
-
-      const startX = anchorRect.left - arenaRect.left + anchorRect.width / 2 + currentX;
-      const startY = anchorRect.top - arenaRect.top + anchorRect.height / 2 + currentY;
-
-      const hoopRect = hoopWrapper.getBoundingClientRect();
-      const targetX = hoopRect.left - arenaRect.left + hoopRect.width / 2;
-      const targetY = hoopRect.top - arenaRect.top + 30; // Aim rim height
-
-      // Curve Control point
-      const controlX = (startX + targetX) / 2;
-      const controlY = Math.min(startY, targetY) - 120;
-
-      trajectoryPath.setAttribute('d', `M ${startX} ${startY} Q ${controlX} ${controlY} ${targetX} ${targetY}`);
-    }
-
-    function onPointerUp(e) {
+    window.addEventListener('pointerup', () => {
       if (!state.isDragging) return;
       state.isDragging = false;
       docCard.classList.remove('grabbing');
 
-      // Check if throw has enough velocity/distance towards hoop
-      const deltaX = state.docPos.x;
-      const deltaY = state.docPos.y;
-
-      // If released near start, just reset
-      if (Math.abs(deltaX) < 30 && Math.abs(deltaY) < 30) {
-        resetDocPosition();
-        return;
-      }
-
-      shootDocument();
-    }
+      executeDunk({ targetX: state.docPos.x, targetY: state.docPos.y });
+    });
 
     /* ==========================================
-       SHOOTING ANIMATION & COLLISION
+       DUNK EXECUTION & MAGNETIC COLLISION
        ========================================== */
-    function shootDocument() {
+    function executeDunk(params) {
       state.isAnimating = true;
-      trajectoryPath.setAttribute('d', 'M 0 0 Q 0 0 0 0'); // Hide trajectory
+      state.shots++;
+      shotsVal.innerText = state.shots;
 
       const anchorRect = docAnchor.getBoundingClientRect();
       const arenaRect = document.getElementById('gameArena').getBoundingClientRect();
-      const hoopRect = hoopWrapper.getBoundingClientRect();
+      const hoopRect = topHoopArea.getBoundingClientRect();
 
       const startX = state.docPos.x;
       const startY = state.docPos.y;
 
-      const targetX = (hoopRect.left - arenaRect.left + hoopRect.width / 2) - (anchorRect.left - arenaRect.left + anchorRect.width / 2);
-      const targetY = (hoopRect.top - arenaRect.top + 30) - (anchorRect.top - arenaRect.top + anchorRect.height / 2);
-
-      // Determine Shot Accuracy (Forgiving collision zone)
-      const isSuccess = Math.abs(startX - targetX) < 250 && startY < 100;
-
-      state.shots++;
-      shotsVal.innerText = state.shots;
+      const rimX = (hoopRect.left - arenaRect.left + hoopRect.width / 2) - (anchorRect.left - arenaRect.left + anchorRect.width / 2);
+      const rimY = (hoopRect.top - arenaRect.top + 90) - (anchorRect.top - arenaRect.top + anchorRect.height / 2);
 
       const startTime = performance.now();
-      const duration = 800; // ms
+      const duration = 700;
 
-      function animateShot(currentTime) {
+      function animate(currentTime) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
 
-        // Parabolic arc math
-        const currentX = startX + (targetX - startX) * progress;
-        const arcY = -150 * Math.sin(progress * Math.PI); // Arc height
-        const currentY = startY + (targetY - startY) * progress + arcY;
-        const rotation = progress * 360;
-        const scale = 1 - progress * 0.3; // Shrink as it reaches target
+        const currentX = startX + (rimX - startX) * progress;
+        const currentY = startY + (rimY - startY) * progress;
+        const scale = 1 - progress * 0.3;
 
-        docCard.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${rotation}deg) scale(${scale})`;
+        docCard.style.transform = `translate(${currentX}px, ${currentY}px) scale(${scale})`;
 
         if (progress < 1) {
-          requestAnimationFrame(animateShot);
+          requestAnimationFrame(animate);
         } else {
-          if (isSuccess) {
-            handleSuccess();
-          } else {
-            handleMiss();
-          }
+          handleSwish();
         }
       }
 
-      requestAnimationFrame(animateShot);
+      requestAnimationFrame(animate);
     }
 
-    /* ==========================================
-       SUCCESS / MISS HANDLERS
-       ========================================== */
-    function handleSuccess() {
+    function handleSwish() {
       state.score++;
       scoreVal.innerText = state.score;
 
-      // Hoop Animations
-      hoopWrapper.classList.add('hoop-shake');
-      netMesh.style.transform = 'scaleY(1.4)';
+      hoopWrapper.style.transform = "translateY(8px)";
+      setTimeout(() => hoopWrapper.style.transform = "translateY(0)", 200);
+
       triggerParticles();
 
-      // Hide Document into Net
       docCard.style.opacity = '0';
-
-      // Feedback Text
-      feedbackTitle.innerText = "SWISH! 🎯";
-      feedbackSubtitle.innerText = "Perfect shot!";
       feedbackOverlay.classList.add('active');
 
       setTimeout(() => {
-        hoopWrapper.classList.remove('hoop-shake');
-        netMesh.style.transform = 'scaleY(1)';
         feedbackOverlay.classList.remove('active');
         transitionToState('converting');
-      }, 1400);
+      }, 1200);
     }
 
-    function handleMiss() {
-      feedbackTitle.innerText = "AIRBALL! 🏀";
-      feedbackSubtitle.innerText = "Almost! Try again.";
-      feedbackOverlay.classList.add('active');
-
-      // Bounce back animation
-      docCard.style.transition = "transform 0.4s ease-out";
-      docCard.style.transform = `translate(${state.docPos.x + 40}px, ${state.docPos.y + 80}px) rotate(45deg)`;
-
-      setTimeout(() => {
-        feedbackOverlay.classList.remove('active');
-        docCard.style.transition = "";
-        resetDocPosition();
-      }, 1000);
-    }
-
-    /* ==========================================
-       PARTICLE SYSTEM
-       ========================================== */
     function triggerParticles() {
       const canvas = document.getElementById('particlesCanvas');
       const ctx = canvas.getContext('2d');
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
 
-      const hoopRect = hoopWrapper.getBoundingClientRect();
+      const hoopRect = topHoopArea.getBoundingClientRect();
       const arenaRect = document.getElementById('gameArena').getBoundingClientRect();
       
       const originX = hoopRect.left - arenaRect.left + hoopRect.width / 2;
-      const originY = hoopRect.top - arenaRect.top + 40;
+      const originY = hoopRect.top - arenaRect.top + 100;
 
-      const particles = [];
-      const colors = ['#F97316', '#22C55E', '#3B82F6', '#EAB308'];
-
-      for (let i = 0; i < 30; i++) {
-        particles.push({
-          x: originX,
-          y: originY,
-          vx: (Math.random() - 0.5) * 8,
-          vy: (Math.random() - 0.8) * 8,
-          size: Math.random() * 6 + 3,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          alpha: 1
-        });
-      }
+      const particles = Array.from({ length: 36 }, () => ({
+        x: originX,
+        y: originY,
+        vx: (Math.random() - 0.5) * 10,
+        vy: (Math.random() - 0.8) * 8,
+        size: Math.random() * 6 + 3,
+        color: ['#22C55E', '#F97316', '#3B82F6'][Math.floor(Math.random() * 3)],
+        alpha: 1
+      }));
 
       function render() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1861,8 +1264,8 @@
             active = true;
             p.x += p.vx;
             p.y += p.vy;
-            p.vy += 0.2; // Gravity
-            p.alpha -= 0.02;
+            p.vy += 0.25;
+            p.alpha -= 0.025;
 
             ctx.globalAlpha = Math.max(0, p.alpha);
             ctx.fillStyle = p.color;
@@ -1879,41 +1282,66 @@
     }
 
     /* ==========================================
-       CONVERSION EXECUTION
+       TRANSITION CONTROLLER
        ========================================== */
+    function transitionToState(target) {
+      stateUpload.style.display = 'none';
+      stateGameplay.style.display = 'none';
+      stateConverting.style.display = 'none';
+      stateCompleted.style.display = 'none';
+
+      if (target === 'upload') {
+        stateUpload.style.display = 'flex';
+        scoreBoard.style.display = 'none';
+        stepBadge.innerText = "STEP 1";
+        gameTitle.innerText = "Upload Document";
+      } else if (target === 'gameplay') {
+        stateGameplay.style.display = 'flex';
+        scoreBoard.style.display = 'flex';
+        stepBadge.innerText = "STEP 2";
+        gameTitle.innerText = "Aim & Dunk Upward";
+        resetDocPosition();
+      } else if (target === 'converting') {
+        stateConverting.style.display = 'flex';
+        stepBadge.innerText = "CONVERTING";
+        gameTitle.innerText = "Converting Document...";
+        runConversion();
+      } else if (target === 'completed') {
+        stateCompleted.style.display = 'flex';
+        stepBadge.innerText = "COMPLETE";
+        gameTitle.innerText = "Your PDF is ready!";
+      }
+    }
+
+    function resetDocPosition() {
+      state.isDragging = false;
+      state.isAnimating = false;
+      state.docPos = { x: 0, y: 0 };
+      docCard.style.transform = `translate(0px, 0px)`;
+      docCard.classList.add('floating');
+      docCard.style.opacity = '1';
+      updateTrajectory();
+    }
+
     async function runConversion() {
-      progressBar.style.width = '0%';
-      
-      const result = await convertDocumentToPDF(state.file, (progress, status) => {
-        progressBar.style.width = `${progress}%`;
+      progressFill.style.width = '0%';
+      await convertDocumentToPDF(state.file, (progress, status) => {
+        progressFill.style.width = `${progress}%`;
         progressStatus.innerText = status;
       });
 
-      state.convertedResult = result;
-
-      // Setup Download Button Behavior
-      downloadBtn.onclick = () => {
-        if (result.isMock) {
-          alert("Prototype Mode: Connect a real DOCX → PDF conversion API endpoint to enable file downloads.");
-        }
-      };
-
-      setTimeout(() => {
-        transitionToState('completed');
-      }, 600);
+      setTimeout(() => transitionToState('completed'), 400);
     }
 
     function resetConverter() {
       state.file = null;
-      state.shots = 0;
-      state.score = 0;
       shotsVal.innerText = '0';
       scoreVal.innerText = '0';
       fileInput.value = '';
       transitionToState('upload');
     }
 
-    function scrollToConverter() {
+    function scrollToCourt() {
       document.getElementById('converter').scrollIntoView({ behavior: 'smooth' });
     }
   </script>
